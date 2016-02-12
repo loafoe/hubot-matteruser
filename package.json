@@ -29,6 +29,8 @@
   "main": "./src/matteruser",
   "dependencies": {
     "parent-require": "^1.0.0",
-    "q": "^1.4.1"
+    "q": "^1.4.1",
+    "url": "^0.11.0",
+    "ws": "^1.0.1"
   }
 }
