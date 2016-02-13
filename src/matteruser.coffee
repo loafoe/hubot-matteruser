@@ -1,18 +1,30 @@
 {Robot,Adapter,TextMessage,User} = require 'hubot'
 
 WebSocket = require 'ws'
-url = require 'url'
 MatterMostClient = require 'mattermost-client'
-
-mmHost = process.env.MATTERMOST_HOST
-mmUser = process.env.MATTERMOST_USER
-mmPassword = process.env.MATTERMOST_PASSWORD
-mmGroup = process.env.MATTERMOST_GROUP
-mmWSSPort = process.env.MATTERMOST_WSS_PORT or '443'
 
 class Matteruser extends Adapter
 
     run: ->
+        mmHost = process.env.MATTERMOST_HOST
+        mmUser = process.env.MATTERMOST_USER
+        mmPassword = process.env.MATTERMOST_PASSWORD
+        mmGroup = process.env.MATTERMOST_GROUP
+        mmWSSPort = process.env.MATTERMOST_WSS_PORT or '443'
+
+        unless mmHost?
+            @robot.logger.emergency "MATTERMOST_HOST is required"
+            process.exit 1
+        unless mmUser?
+            @robot.logger.emergency "MATTERMOST_USER is required"
+            process.exit 1
+        unless mmPassword?
+            @robot.logger.emergency "MATTERMOST_PASSWORD is required"
+            process.exit 1
+        unless mmGroup?
+            @robot.logger.emergency "MATTERMOST_GROUP is required"
+            process.exit 1
+
         @client = new MatterMostClient mmHost, mmGroup, mmUser, mmPassword, {wssPort: mmWSSPort}
 
         @client.on 'open', @.open
@@ -20,7 +32,6 @@ class Matteruser extends Adapter
         @client.on 'connected', @.onConnected
         @client.on 'message', @.message
         @client.on 'error', @.error
-        @robot.logger.info "Running"
         @robot.brain.on 'loaded', @.brainLoaded
 
         @client.login()
@@ -51,26 +62,23 @@ class Matteruser extends Adapter
         @client.postMessage(str, envelope.room) for str in strings
 
     reply: (envelope, strings...) ->
-        @robot.logger.info "Reply"
+        @robot.logger.debug "Reply"
         strings = strings.map (s) -> "@#{envelope.user.name} #{s}"
         @send envelope, strings...
 
-
     message: (msg) =>
-        return if msg.user_id == @self.id
+        return if msg.user_id == @self.id # Ignore our own output
         @robot.logger.debug 'From: ' + msg.user_id + ', To: ' + @self.id
 
         mmChannel = @client.getChannelByID msg.channel_id if msg.channel_id
-        mmUser = @client.getUserByID(msg.user_id)
-        mmPost = JSON.parse(msg.props.post)
+        mmUser = @client.getUserByID msg.user_id
+        mmPost = JSON.parse msg.props.post
 
-        #@robot.logger.info msg
-
-        @robot.logger.info 'Received message from '+mmUser.username+': ' + mmPost.message
+        @robot.logger.debug 'Received message from '+mmUser.username+': ' + mmPost.message
         user = @robot.brain.userForId msg.user_id, name: mmUser.username, room: msg.channel_id
-        text = new TextMessage(user, mmPost.message, msg.id)
+        text = new TextMessage user, mmPost.message, msg.id
         @receive text
-        @robot.logger.info "Message sent to hubot brain."
+        @robot.logger.debug "Message sent to hubot brain."
         return true
 
 exports.use = (robot) ->
