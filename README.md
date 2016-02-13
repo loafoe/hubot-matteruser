@@ -1,6 +1,6 @@
 [![Downloads](https://img.shields.io/npm/dm/hubot-matteruser.svg)](https://www.npmjs.com/package/hubot-matteruser)
-[![Version](https://img.shields.io/npm/v/hubot-matteruser.svg)](https://github.com/anroots/hubot-matteruser/releases)
-[![Licence](https://img.shields.io/npm/l/express.svg)](https://github.com/anroots/hubot-matteruser/blob/master/LICENSE)
+[![Version](https://img.shields.io/npm/v/hubot-matteruser.svg)](https://github.com/loafoe/hubot-matteruser/releases)
+[![Licence](https://img.shields.io/npm/l/express.svg)](https://github.com/loafoe/hubot-matteruser/blob/master/LICENSE)
 
 # hubot-matteruser
 
