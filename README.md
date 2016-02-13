@@ -34,7 +34,7 @@ The adapter requires the following environment variables to be defined before yo
 
 ## Example
 
-The below example assumes you have created a user `hubot` with password `s3cr3tP@ssw0rd!` on your Mattermost server with a `core` team hosted reachable `https://mm.yourcompany.com/core`
+The below example assumes you have created a user `hubot` with password `s3cr3tP@ssw0rd!` on your Mattermost server with a `core` team reachable on URL `https://mm.yourcompany.com/core`
 
   ```sh
 export MATTERMOST_HOST=mm.yourcompany.com 
