@@ -12,12 +12,6 @@ mmWSSPort = process.env.MATTERMOST_WSS_PORT or '443'
 
 class Matteruser extends Adapter
 
-    send: (envelope, strings...) ->
-        @robot.logger.info "Should send: " + strings
-
-    reply: (envelope, strings...) ->
-        @robot.logger.info "Should send reply: " + strings
-
     run: ->
         @client = new MatterMostClient mmHost, mmGroup, mmUser, mmPassword, {wssPort: mmWSSPort}
 
@@ -53,8 +47,18 @@ class Matteruser extends Adapter
         @robot.logger.info 'Brain loaded'
         return true
 
+    send: (envelope, strings...) ->
+        @client.postMessage(str, envelope.room) for str in strings
+
+    reply: (envelope, strings...) ->
+        @robot.logger.info "Reply"
+        strings = strings.map (s) -> "@#{envelope.user.name} #{s}"
+        @send envelope, strings...
+
+
     message: (msg) =>
-        return if msg.user_id == @self.user_id
+        return if msg.user_id == @self.id
+        @robot.logger.debug 'From: ' + msg.user_id + ', To: ' + @self.id
 
         mmChannel = @client.getChannelByID msg.channel_id if msg.channel_id
         mmUser = @client.getUserByID(msg.user_id)
