@@ -35,12 +35,12 @@ The adapter requires the following environment variables to be defined before yo
 
 ## Example
 
-The below example assumes you have created a user `hubot` with password `s3cr3tP@ssw0rd!` on your Mattermost server with a `core` team reachable on URL `https://mm.yourcompany.com/core`
+The below example assumes you have created a user `hubot@yourcompany.com` with username `hubot` and password `s3cr3tP@ssw0rd!` on your Mattermost server in the `core` team reachable on URL `https://mm.yourcompany.com/core`
 
   ```sh
 export MATTERMOST_HOST=mm.yourcompany.com 
 export MATTERMOST_GROUP=core
-export MATTERMOST_USER=hubot
+export MATTERMOST_USER=hubot@yourcompany.com
 export MATTERMOST_PASSWORD=s3cr3tP@ssw0rd!
   ```
 
