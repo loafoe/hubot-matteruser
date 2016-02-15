@@ -1,4 +1,4 @@
-{Robot,Adapter,TextMessage,User} = require 'hubot'
+{Robot,Adapter,TextMessage,User,EnterMessage,LeaveMessage} = require 'hubot'
 
 WebSocket = require 'ws'
 MatterMostClient = require 'mattermost-client'
