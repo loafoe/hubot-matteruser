@@ -31,6 +31,8 @@ class Matteruser extends Adapter
         @client.on 'loggedIn', @.loggedIn
         @client.on 'connected', @.onConnected
         @client.on 'message', @.message
+        @client.on 'user_added', @.userAdded
+        @client.on 'user_removed', @.userRemoved
         @client.on 'error', @.error
         @robot.brain.on 'loaded', @.brainLoaded
 
@@ -67,6 +69,7 @@ class Matteruser extends Adapter
         @send envelope, strings...
 
     message: (msg) =>
+        @robot.logger.debug msg
         return if msg.user_id == @self.id # Ignore our own output
         @robot.logger.debug 'From: ' + msg.user_id + ', To: ' + @self.id
 
@@ -79,6 +82,18 @@ class Matteruser extends Adapter
         text = new TextMessage user, mmPost.message, msg.id
         @receive text
         @robot.logger.debug "Message sent to hubot brain."
+        return true
+
+    userAdded: (msg) =>
+        mmUser = @client.getUserByID msg.user_id
+        user = @robot.brain.userForId msg.user_id, name: mmUser.username, room: msg.channel_id
+        @receive new EnterMessage user
+        return true
+
+    userRemoved: (msg) =>
+        mmUser = @client.getUserByID msg.user_id
+        user = @robot.brain.userForId msg.user_id, name: mmUser.username, room: msg.channel_id
+        @receive new LeaveMessage user
         return true
 
 exports.use = (robot) ->
