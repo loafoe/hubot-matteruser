@@ -79,8 +79,11 @@ class Matteruser extends Adapter
 
         @robot.logger.debug 'Received message from '+mmUser.username+': ' + mmPost.message
         user = @robot.brain.userForId msg.user_id, name: mmUser.username, room: msg.channel_id
-        text = new TextMessage user, mmPost.message, msg.id
-        @receive text
+
+        text = mmPost.message
+        text = "#{@robot.name} #{text}" if msg.props.channel_type == 'D' # Direct message
+
+        @receive new TextMessage user, text, msg.id
         @robot.logger.debug "Message sent to hubot brain."
         return true
 
