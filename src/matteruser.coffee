@@ -1,6 +1,5 @@
 {Robot,Adapter,TextMessage,User,EnterMessage,LeaveMessage} = require 'hubot'
 
-WebSocket = require 'ws'
 MatterMostClient = require 'mattermost-client'
 
 class Matteruser extends Adapter

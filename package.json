@@ -30,7 +30,6 @@
   "dependencies": {
     "mattermost-client": "^1.2.0",
     "parent-require": "^1.0.0",
-    "q": "^1.4.1",
-    "ws": "^1.0.1"
+    "q": "^1.4.1"
   }
 }
