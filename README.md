@@ -29,7 +29,7 @@ The adapter requires the following environment variables to be defined before yo
 |----------|----------|-------------|
 | MATTERMOST\_HOST | Yes | The Mattermost host e.g. _mm.yourcompany.com_ |
 | MATTERMOST\_GROUP | Yes | The team/group on your Mattermost server e.g. _core_ |
-| MATTERMOST\_USER | Yes | The Mattermost user account name e.g. _hubot_ |
+| MATTERMOST\_USER | Yes | The Mattermost user account name e.g. _hubot@yourcompany.com_ |
 | MATTERMOST\_PASSWORD | Yes | The password of the user e.g. _s3cr3tP@ssw0rd!_ |
 | MATTERMOST\_WSS_PORT | No | Overrides the default port `443` for  websocket (`wss://`) connections |
 
