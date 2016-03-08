@@ -28,7 +28,7 @@
   },
   "main": "./src/matteruser",
   "dependencies": {
-    "mattermost-client": "^1.2.0",
+    "mattermost-client": "^1.3.0",
     "parent-require": "^1.0.0",
     "q": "^1.4.1"
   }

@@ -30,6 +30,7 @@ class Matteruser extends Adapter
         @client.on 'loggedIn', @.loggedIn
         @client.on 'connected', @.onConnected
         @client.on 'message', @.message
+        @client.on 'profilesLoaded', @.profilesLoaded
         @client.on 'user_added', @.userAdded
         @client.on 'user_removed', @.userRemoved
         @client.on 'error', @.error
@@ -54,6 +55,12 @@ class Matteruser extends Adapter
         @self = user
         @robot.name = @self.username
         return true
+
+    profilesLoaded: =>
+        for key, value of @client.users
+            @robot.logger.debug 'Adding user ' +key
+            user = @robot.brain.userForId key, value
+
 
     brainLoaded: =>
         @robot.logger.info 'Brain loaded'
