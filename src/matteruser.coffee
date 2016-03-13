@@ -50,6 +50,22 @@ class Matteruser extends Adapter
         @emit 'connected'
         return true
 
+    userChange: (user) =>
+        return unless user?.id?
+        newUser =
+            name: user.username
+            real_name: "#{user.first_name} #{user.last_name}"
+            email_address: user.email
+            mm: {}
+        for key, value of user
+            newUser.mm[key] = value
+        if user.id of @robot.brain.data.users
+            for key, value of @robot.brain.data.users[user.id]
+                unless key of newUser
+                    newUser[key] = value
+        delete @robot.brain.data.users[user.id]
+        @robot.brain.userForId user.id, newUser
+
     loggedIn: (user) =>
         @robot.logger.info 'Logged in as user "'+user.username+'" but not connected yet.'
         @self = user
@@ -57,13 +73,14 @@ class Matteruser extends Adapter
         return true
 
     profilesLoaded: =>
-        for key, value of @client.users
-            @robot.logger.debug 'Adding user ' +key
-            user = @robot.brain.userForId key, value
-
+        for id, user of @client.users
+            @robot.logger.debug 'Adding user '+id
+            @userChange user
 
     brainLoaded: =>
         @robot.logger.info 'Brain loaded'
+        for id, user of @client.users
+            @userChange user
         return true
 
     send: (envelope, strings...) ->
