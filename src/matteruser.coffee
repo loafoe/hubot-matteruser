@@ -34,7 +34,11 @@ class Matteruser extends Adapter
         @client.on 'user_added', @.userAdded
         @client.on 'user_removed', @.userRemoved
         @client.on 'error', @.error
+
         @robot.brain.on 'loaded', @.brainLoaded
+
+        @robot.on 'slack-attachment', @.slackAttachmentMessage
+        @robot.on 'slack.attachment', @.slackAttachmentMessage
 
         @client.login()
 
@@ -121,6 +125,27 @@ class Matteruser extends Adapter
         user = @robot.brain.userForId msg.user_id, name: mmUser.username, room: msg.channel_id
         @receive new LeaveMessage user
         return true
+
+    slackAttachmentMessage: (data) ->
+        return unless data.room
+        msg = {}
+        msg.text = data.text
+        msg.type = "slack_attachment"
+        msg.props = {}
+        msg.channel_id = data.room
+        msg.props.attachments = data.attachments || []
+        msg.props.attachments = [msg.props.attachments] unless Array.isArray msg.props.attachments
+        if data.username && data.username != @robot.name
+            msg.as_user = false
+            msg.username = data.username
+            if data.icon_url?
+                msg.icon_url = data.icon_url
+            else if data.icon_emoji?
+                msg.icon_emoji = data.icon_emoji
+        else
+            msg.as_user = true
+
+        @client.customMessage(msg, msg.channel_id)
 
 exports.use = (robot) ->
     new Matteruser robot
