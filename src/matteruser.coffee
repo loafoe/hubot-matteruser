@@ -130,7 +130,7 @@ class Matteruser extends Adapter
         @receive new LeaveMessage user
         return true
 
-    slackAttachmentMessage: (data) ->
+    slackAttachmentMessage: (data) =>
         return unless data.room
         msg = {}
         msg.text = data.text
