@@ -61,6 +61,8 @@ class Matteruser extends Adapter
             real_name: "#{user.first_name} #{user.last_name}"
             email_address: user.email
             mm: {}
+        # Preserve the DM channel ID if it exists
+        newUser.mm.dm_channel_id = @robot.brain.userForId(user.id).mm?.dm_channel_id
         for key, value of user
             newUser.mm[key] = value
         if user.id of @robot.brain.data.users
@@ -89,6 +91,39 @@ class Matteruser extends Adapter
 
     send: (envelope, strings...) ->
         @client.postMessage(str, envelope.room) for str in strings
+        # Check if the target room is also a user's username
+        user = @robot.brain.userForName(envelope.room)
+
+        # If it's not, continue as normal
+        unless user
+            @client.postMessage(str, envelope.room) for str in strings
+            return
+
+        # If it is, we assume they want to DM that user
+        # Message their DM channel ID if it already exists.
+        if user.mm?.dm_channel_id?
+            @client.postMessage(str, user.mm.dm_channel_id) for str in strings
+            return
+
+        # Otherwise, create a new DM channel ID and message it.
+        @client.getUserDirectMessageChannel user.id, (data) =>
+
+          # If there's no error, store the DM channel ID and send the message
+          unless data.error
+              user.mm.dm_channel_id = data.id
+              @client.postMessage(str, data.id) for str in strings
+              return
+
+          # Mattermost's API returns a 500 error if a DM channel already exists
+          # We can look through all the channels and find the one that only
+          # contains us and the target user and has a total of 2 members
+          for channel, details of @client.getAllChannels()
+              @client.getChannelInfo channel, 2, (info) =>
+                  return if info.member_count is not 2
+                  for member in info.members
+                      if member.username is envelope.room
+                          user.mm.dm_channel_id = info.id
+                          @client.postMessage(str, info.id) for str in strings
 
     reply: (envelope, strings...) ->
         @robot.logger.debug "Reply"
@@ -109,7 +144,9 @@ class Matteruser extends Adapter
         user.room = msg.channel_id
 
         text = mmPost.message
-        text = "#{@robot.name} #{text}" if msg.props.channel_type == 'D' and !///^#{@robot.name} ///i.test(text) # Direct message
+        if msg.props.channel_type == 'D' and !///^#{@robot.name} ///i.test(text) # Direct message
+          text = "#{@robot.name} #{text}"
+          user.mm.dm_channel_id = msg.channel_id
 
         @receive new TextMessage user, text, msg.id
         @robot.logger.debug "Message sent to hubot brain."
