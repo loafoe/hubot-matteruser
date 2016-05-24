@@ -90,7 +90,6 @@ class Matteruser extends Adapter
         return true
 
     send: (envelope, strings...) ->
-        @client.postMessage(str, envelope.room) for str in strings
         # Check if the target room is also a user's username
         user = @robot.brain.userForName(envelope.room)
 
@@ -106,24 +105,9 @@ class Matteruser extends Adapter
             return
 
         # Otherwise, create a new DM channel ID and message it.
-        @client.getUserDirectMessageChannel user.id, (data) =>
-
-          # If there's no error, store the DM channel ID and send the message
-          unless data.error
-              user.mm.dm_channel_id = data.id
-              @client.postMessage(str, data.id) for str in strings
-              return
-
-          # Mattermost's API returns a 500 error if a DM channel already exists
-          # We can look through all the channels and find the one that only
-          # contains us and the target user and has a total of 2 members
-          for channel, details of @client.getAllChannels()
-              @client.getChannelInfo channel, 2, (info) =>
-                  return if info.member_count is not 2
-                  for member in info.members
-                      if member.username is envelope.room
-                          user.mm.dm_channel_id = info.id
-                          @client.postMessage(str, info.id) for str in strings
+        @client.getUserDirectMessageChannel user.id, (channel) =>
+            user.mm.dm_channel_id = channel.id
+            @client.postMessage(str, channel.id) for str in strings
 
     reply: (envelope, strings...) ->
         @robot.logger.debug "Reply"
