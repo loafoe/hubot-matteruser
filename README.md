@@ -46,7 +46,7 @@ export MATTERMOST_PASSWORD=s3cr3tP@ssw0rd!
 
 ## Example usage
 
-For a complete working application that uses thie client checkout the [Hubot Mattermost adapter](https://github.com/loafoe/hubot-matteruser)
+For a complete working application that uses this client checkout the [Hubot Mattermost adapter](https://github.com/loafoe/hubot-matteruser)
 
 ## Mattermost 3.x
 
@@ -54,12 +54,12 @@ Recently Mattermost has received a major upgrade that introduces backwards incom
 
 ### Upgrading your Hubot for Mattermost 3.x
 
-Find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `mattermost-client`. Change the verion so it points to `^3.0.0` of the client. Example:
+Find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `hubot-matteruser`. Change the verion so it points to `^3.0.1` of the client. Example:
 
   ```json
     ...
     "dependencies": {
-      "hubot-matteruser": "^3.0.0"
+      "hubot-matteruser": "^3.0.1"
     },
     ...
   ```
