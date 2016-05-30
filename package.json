@@ -1,6 +1,6 @@
 {
   "name": "hubot-matteruser",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "author": {
     "name": "Andy Lo-A-Foe",
     "url": "https://aemian.com/"
@@ -28,7 +28,7 @@
   },
   "main": "./src/matteruser",
   "dependencies": {
-    "mattermost-client": "git://github.com/loafoe/mattermost-client.git#master",
+    "mattermost-client": "^3.1.0",
     "parent-require": "^1.0.0",
     "q": "^1.4.1"
   }
