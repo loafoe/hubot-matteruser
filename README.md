@@ -31,7 +31,7 @@ The adapter requires the following environment variables to be defined before yo
 | MATTERMOST\_GROUP | Yes | The team/group on your Mattermost server e.g. _core_ |
 | MATTERMOST\_USER | Yes | The Mattermost user account name e.g. _hubot@yourcompany.com_ |
 | MATTERMOST\_PASSWORD | Yes | The password of the user e.g. _s3cr3tP@ssw0rd!_ |
-| MATTERMOST\_WSS_PORT | No | Overrides the default port `443` for  websocket (`wss://`) connections |
+| MATTERMOST\_WSS\_PORT | No | Overrides the default port `443` for  websocket (`wss://`) connections |
 
 ## Example configuration
 
@@ -54,12 +54,12 @@ Recently Mattermost has received a major upgrade that introduces backwards incom
 
 ### Upgrading your Hubot for Mattermost 3.x
 
-Find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `hubot-matteruser`. Change the verion so it points to `^3.0.1` of the client. Example:
+Find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `hubot-matteruser`. Change the verion so it points to `^3.1.0` of the client. Example:
 
   ```json
     ...
     "dependencies": {
-      "hubot-matteruser": "^3.0.1"
+      "hubot-matteruser": "^3.1.0"
     },
     ...
   ```
