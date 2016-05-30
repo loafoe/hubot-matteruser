@@ -28,7 +28,7 @@
   },
   "main": "./src/matteruser",
   "dependencies": {
-    "mattermost-client": "^3.0.1",
+    "mattermost-client": "git://github.com/loafoe/mattermost-client.git#master",
     "parent-require": "^1.0.0",
     "q": "^1.4.1"
   }
