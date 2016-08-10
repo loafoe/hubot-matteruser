@@ -121,14 +121,14 @@ class Matteruser extends Adapter
 
         mmChannel = @client.getChannelByID msg.channel_id if msg.channel_id
         mmUser = @client.getUserByID msg.user_id
-        mmPost = JSON.parse msg.props.post
+        mmPost = JSON.parse msg.data.post
 
         @robot.logger.debug 'Received message from '+mmUser.username+': ' + mmPost.message
         user = @robot.brain.userForId msg.user_id
         user.room = msg.channel_id
 
         text = mmPost.message
-        if msg.props.channel_type == 'D' and !///^#{@robot.name} ///i.test(text) # Direct message
+        if msg.data.channel_type == 'D' and !///^#{@robot.name} ///i.test(text) # Direct message
           text = "#{@robot.name} #{text}"
           user.mm.dm_channel_id = msg.channel_id
 
