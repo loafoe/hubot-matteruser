@@ -66,10 +66,6 @@ Find the `package.json` file in your Hubot directory and look for the line in th
     ...
   ```
 
-### Known limitations
-
-Only `https` is supported at this time. Go check out [Let's Encrypt](https://letsencrypt.org) if you need a certificate.
-
 ## License
 
 The MIT License. See `LICENSE` file.
