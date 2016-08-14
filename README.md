@@ -33,6 +33,7 @@ The adapter requires the following environment variables to be defined before yo
 | MATTERMOST\_PASSWORD | Yes | The password of the user e.g. _s3cr3tP@ssw0rd!_ |
 | MATTERMOST\_WSS\_PORT | No | Overrides the default port `443` for  websocket (`wss://`) connections |
 | MATTERMOST\_TLS\_VERIFY | No | (default: true) set to 'false' to allow connections when certs can not be verified (ex: self-signed, internal CA, ... - MITM risks) |
+| MATTEMOST\_USE\_TLS | No | (default: true) set to 'false' to switch to http/ws protocols |
 | MATTERMOST\_LOG\_LEVEL | No | (default: info) set log level (also: debug, ...) |
 
 ## Example configuration
@@ -50,18 +51,18 @@ export MATTERMOST_PASSWORD=s3cr3tP@ssw0rd!
 
 For a complete working application that uses this client checkout the [Hubot Mattermost adapter](https://github.com/loafoe/hubot-matteruser)
 
-## Mattermost 3.x
+## Mattermost 3.3
 
 Recently Mattermost has received a major upgrade that introduces backwards incompatible changes. Since `hubot-matteruser` is using user credentials for interacting with the Mattermost API this will *break your Hubot* if you upgrade your Mattermost server without also upgrading the `mattermost-client` version it uses.
 
-### Upgrading your Hubot for Mattermost 3.x
+### Upgrading your Hubot for Mattermost 3.3
 
-Find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `hubot-matteruser`. Change the verion so it points to `^3.1.1` of the client. Example:
+Find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `hubot-matteruser`. Change the verion so it points to `^3.3.0` of the client. Example:
 
   ```json
     ...
     "dependencies": {
-      "hubot-matteruser": "^3.1.1"
+      "hubot-matteruser": "^3.3.0"
     },
     ...
   ```
