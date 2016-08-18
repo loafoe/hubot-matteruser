@@ -62,7 +62,7 @@ Find the `package.json` file in your Hubot directory and look for the line in th
   ```json
     ...
     "dependencies": {
-      "hubot-matteruser": "^3.3.0"
+      "hubot-matteruser": "^3.3.1"
     },
     ...
   ```
