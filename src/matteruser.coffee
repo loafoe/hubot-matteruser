@@ -96,7 +96,8 @@ class Matteruser extends Adapter
 
         # If it's not, continue as normal
         unless user
-            @client.postMessage(str, envelope.room) for str in strings
+            channel = @client.findChannelByName(envelope.room)
+            @client.postMessage(str, channel?.id or envelope.room) for str in strings
             return
 
         # If it is, we assume they want to DM that user
