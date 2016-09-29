@@ -174,5 +174,11 @@ class Matteruser extends Adapter
 
         @client.customMessage(msg, msg.channel_id)
 
+    changeHeader: (channel_id, header) ->
+        return unless channel_id?
+        return unless header?
+
+        @client.setChannelHeader(channel_id, header)
+
 exports.use = (robot) ->
     new Matteruser robot
