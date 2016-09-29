@@ -174,5 +174,15 @@ class Matteruser extends Adapter
 
         @client.customMessage(msg, msg.channel_id)
 
+    changeHeader: (channel, header) ->
+        return unless channel?
+        return unless header?
+
+        channelInfo = @client.findChannelByName(channel)
+
+        return @robot.logger.error "Channel not found" unless channelInfo?
+
+        @client.setChannelHeader(channelInfo.id, header)
+
 exports.use = (robot) ->
     new Matteruser robot
