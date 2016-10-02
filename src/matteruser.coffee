@@ -118,24 +118,23 @@ class Matteruser extends Adapter
 
     message: (msg) =>
         @robot.logger.debug msg
-        data = msg.data
-        return if data.post.user_id == @self.id # Ignore our own output
-        @robot.logger.debug 'From: ' + data.post.user_id + ', To: ' + @self.id
+        mmPost = JSON.parse msg.data.post
+        return if mmPost.user_id == @self.id # Ignore our own output
+        @robot.logger.debug 'From: ' + mmPost.user_id + ', To: ' + @self.id
 
-        mmChannel = @client.getChannelByID data.post.channel_id if data.post.channel_id
-        mmUser = @client.getUserByID data.post.user_id
-        mmPost = JSON.parse data.post
+        mmChannel = @client.getChannelByID mmPost.channel_id if mmPost.channel_id
+        mmUser = @client.getUserByID mmPost.user_id
 
         @robot.logger.debug 'Received message from '+mmUser.username+': ' + mmPost.message
-        user = @robot.brain.userForId data.post.user_id
-        user.room = data.post.channel_id
+        user = @robot.brain.userForId mmPost.user_id
+        user.room = mmPost.channel_id
 
         text = mmPost.message
         if msg.data.channel_type == 'D' and !///^#{@robot.name} ///i.test(text) # Direct message
           text = "#{@robot.name} #{text}"
-          user.mm.dm_channel_id = data.post.channel_id
+          user.mm.dm_channel_id = mmPost.channel_id
 
-        @receive new TextMessage user, text, data.post.id
+        @receive new TextMessage user, text, mmPost.id
         @robot.logger.debug "Message sent to hubot brain."
         return true
 
