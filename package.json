@@ -28,7 +28,7 @@
   },
   "main": "./src/matteruser",
   "dependencies": {
-    "mattermost-client": "~3.4.0",
+    "mattermost-client": "git+https://github.com/loafoe/mattermost-client.git#feature/remove-client-copy",
     "parent-require": "^1.0.0",
     "q": "^1.4.1"
   }
