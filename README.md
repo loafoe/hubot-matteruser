@@ -52,18 +52,18 @@ export MATTERMOST_PASSWORD=s3cr3tP@ssw0rd!
 
 For a complete working application that uses this client checkout the [Hubot Mattermost adapter](https://github.com/loafoe/hubot-matteruser)
 
-## Mattermost 3.3
+## Mattermost 3.5
 
 Recently Mattermost has received a major upgrade that introduces backwards incompatible changes. Since `hubot-matteruser` is using user credentials for interacting with the Mattermost API this will *break your Hubot* if you upgrade your Mattermost server without also upgrading the `mattermost-client` version it uses.
 
-### Upgrading your Hubot for Mattermost 3.3
+### Upgrading your Hubot for Mattermost 3.5
 
-Find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `hubot-matteruser`. Change the verion so it points to `^3.3.0` of the client. Example:
+Find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `hubot-matteruser`. Change the verion so it points to `^3.5.0` of the client. Example:
 
   ```json
     ...
     "dependencies": {
-      "hubot-matteruser": "^3.3.1"
+      "hubot-matteruser": "^3.5.0"
     },
     ...
   ```
