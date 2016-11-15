@@ -128,7 +128,7 @@ class Matteruser extends Adapter
 
         text = mmPost.message
         if msg.data.channel_type == 'D'
-          if !///^#{@robot.name} ///i.test(text) # Direct message
+          if !///^@?#{@robot.name} ///i.test(text) # Direct message
             text = "#{@robot.name} #{text}"
           user.mm.dm_channel_id = mmPost.channel_id
         @robot.logger.debug 'Text: ' + text
