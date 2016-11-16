@@ -68,6 +68,10 @@ Find the `package.json` file in your Hubot directory and look for the line in th
     ...
   ```
 
+### On being backwards compatible
+
+As the Mattermost API is still not stabilised this adapter does not attempt to be backwards compatible. We do our best to track the latest official release of Mattermost.
+
 ## License
 
 The MIT License. See `LICENSE` file.
