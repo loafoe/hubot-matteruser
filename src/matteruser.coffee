@@ -139,7 +139,7 @@ class Matteruser extends Adapter
 
     userAdded: (msg) =>
         mmUser = @client.getUserByID msg.user_id
-        @userChange user
+        @userChange mmUser
         user = @robot.brain.userForId msg.user_id
         user.room = msg.channel_id
         @receive new EnterMessage user
