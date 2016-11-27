@@ -58,12 +58,12 @@ Recently Mattermost has received a major upgrade that introduces backwards incom
 
 ### Upgrading your Hubot for Mattermost 3.5
 
-Find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `hubot-matteruser`. Change the verion so it points to `^3.5.0` of the client. Example:
+Find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `hubot-matteruser`. Change the verion so it points to `^3.5.1` of the client. Example:
 
   ```json
     ...
     "dependencies": {
-      "hubot-matteruser": "^3.5.0"
+      "hubot-matteruser": "^3.5.1"
     },
     ...
   ```
