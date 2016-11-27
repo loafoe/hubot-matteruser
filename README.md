@@ -4,7 +4,7 @@
 
 # hubot-matteruser
 
-Hubot Adapter for Mattermost using the Web API and Websockets.
+Hubot Adapter for Mattermost using the Web API and WebSockets.
 
 ## Description
 
