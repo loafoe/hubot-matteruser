@@ -32,9 +32,6 @@ Try `hubot map me [NAME_OF_CITY]` to have Hubot reach out to Google Maps and bri
 
 ![s](https://cloud.githubusercontent.com/assets/177788/20645769/9d58a786-b41c-11e6-90b1-6a9e7ab19172.png)
 
-
-
-
 ## Installation
 
 Creating a bot from scratch is easy:
@@ -71,10 +68,6 @@ export MATTERMOST_GROUP=core
 export MATTERMOST_USER=hubot@yourcompany.com
 export MATTERMOST_PASSWORD=s3cr3tP@ssw0rd!
   ```
-
-## Example usage
-
-For a complete working application that uses this client checkout the [Hubot Mattermost adapter](https://github.com/loafoe/hubot-matteruser)
 
 ## Mattermost 3.5
 
