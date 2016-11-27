@@ -28,6 +28,7 @@ class Matteruser extends Adapter
         @client = new MatterMostClient mmHost, mmGroup, mmUser, mmPassword, {wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000}
 
         @client.on 'open', @.open
+        @client.on 'hello', @.onHello
         @client.on 'loggedIn', @.loggedIn
         @client.on 'connected', @.onConnected
         @client.on 'message', @.message
@@ -53,6 +54,10 @@ class Matteruser extends Adapter
     onConnected: =>
         @robot.logger.info 'Connected to Mattermost.'
         @emit 'connected'
+        return true
+
+    onHello: (event) =>
+        @robot.logger.info 'Mattermost server: ' + event.data.server_version
         return true
 
     userChange: (user) =>
