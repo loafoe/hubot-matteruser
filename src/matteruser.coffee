@@ -57,6 +57,7 @@ class Matteruser extends Adapter
 
     userChange: (user) =>
         return unless user?.id?
+        @robot.logger.debug 'Adding user '+user.id
         newUser =
             name: user.username
             real_name: "#{user.first_name} #{user.last_name}"
@@ -81,7 +82,6 @@ class Matteruser extends Adapter
 
     profilesLoaded: =>
         for id, user of @client.users
-            @robot.logger.debug 'Adding user '+id
             @userChange user
 
     brainLoaded: =>
@@ -138,16 +138,16 @@ class Matteruser extends Adapter
         return true
 
     userAdded: (msg) =>
-        mmUser = @client.getUserByID msg.user_id
+        mmUser = @client.getUserByID msg.data.user_id
         @userChange mmUser
-        user = @robot.brain.userForId msg.user_id
+        user = @robot.brain.userForId mmUser.id
         user.room = msg.channel_id
         @receive new EnterMessage user
         return true
 
     userRemoved: (msg) =>
-        mmUser = @client.getUserByID msg.user_id
-        user = @robot.brain.userForId msg.user_id
+        mmUser = @client.getUserByID msg.data.user_id
+        user = @robot.brain.userForId mmUser.id
         user.room = msg.channel_id
         @receive new LeaveMessage user
         return true
