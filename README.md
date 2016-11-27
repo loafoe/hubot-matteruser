@@ -10,6 +10,13 @@ Hubot Adapter for Mattermost using the Web API and Websockets.
 
 Use this [Hubot](https://github.com/github/hubot) Adapter to connect to your Mattermost server. You can invite your bot to any channel just as a regular user. It will listen and perform your commands. The adapter uses [mattermost-client](https://github.com/loafoe/mattermost-client) for all low level Mattermost communication.
 
+### Try out the Hubot demo
+
+You can try out Hubot by joining the Mattermost community server and joining the Hubot channel: 
+
+1. Create an account on the Mattermost nightly builds server at https://pre-release.mattermost.com/
+2. Join the "Hubot" channel
+3. Type `hubot help` for instructions
 
 ## Installation
 
