@@ -11,6 +11,7 @@ class Matteruser extends Adapter
         mmGroup = process.env.MATTERMOST_GROUP
         mmWSSPort = process.env.MATTERMOST_WSS_PORT or '443'
         mmHTTPPort = process.env.MATTERMOST_HTTP_PORT or null
+        @mmNoReply = process.env.MATTERMOST_REPLY == 'false'
 
         unless mmHost?
             @robot.logger.emergency "MATTERMOST_HOST is required"
@@ -117,9 +118,42 @@ class Matteruser extends Adapter
             @client.postMessage(str, channel.id) for str in strings
 
     reply: (envelope, strings...) ->
-        @robot.logger.debug "Reply"
+        if @mmNoReply
+          return @send(envelope, strings...)
+
         strings = strings.map (s) -> "@#{envelope.user.name} #{s}"
-        @send envelope, strings...
+        postData = {}
+        postData.message = strings[0]
+
+        # Set the comment relationship
+        postData.root_id = envelope.message.id
+        postData.parent_id = postData.root_id
+
+        postData.create_at = Date.now()
+        postData.user_id = @self.id
+        postData.filename = []
+        # Check if the target room is also a user's username
+        user = @robot.brain.userForName(envelope.room)
+
+        # If it's not, continue as normal
+        unless user
+            channel = @client.findChannelByName(envelope.room)
+            postData.channel_id = channel?.id or envelope.room
+            @client.customMessage(postData, postData.channel_id)
+            return
+
+        # If it is, we assume they want to DM that user
+        # Message their DM channel ID if it already exists.
+        if user.mm?.dm_channel_id?
+            postData.channel_id = user.mm.dm_channel_id
+            @client.customMessage(postData, postData.channel_id)
+            return
+
+        # Otherwise, create a new DM channel ID and message it.
+        @client.getUserDirectMessageChannel user.id, (channel) =>
+            user.mm.dm_channel_id = channel.id
+            postData.channel_id = channel.id
+            @client.customMessage(postData, postData.channel_id)
 
     message: (msg) =>
         @robot.logger.debug msg
