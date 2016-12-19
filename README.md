@@ -66,7 +66,7 @@ docker run -it \
 
 ### Docker Compose
 
-You can find [here](https://github.com/banzo/mattermost-docker) a fork of the [official Mattermost Docker Compose stack](https://github.com/mattermost/mattermost-docker) plugged to Hubot-Matteruser: 
+You can find [here](https://github.com/banzo/mattermost-docker/tree/feature/hubot-matteruser) a fork of the [official Mattermost Docker Compose stack](https://github.com/mattermost/mattermost-docker) plugged to Hubot-Matteruser: 
 
 ```
 docker-compose build
