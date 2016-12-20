@@ -66,12 +66,16 @@ docker run -it \
 
 ### Docker Compose
 
-You can find [here](https://github.com/banzo/mattermost-docker/tree/feature/hubot-matteruser) a fork of the [official Mattermost Docker Compose stack](https://github.com/mattermost/mattermost-docker) plugged to Hubot-Matteruser: 
+To integrate with a running Mattermost instance, update docker-compose.yml accordingly and launch the bot:
 
-```
+``` 
 docker-compose build
 docker-compose run -d
 ```
+
+
+If you just want to test locally, you can find [here](https://github.com/banzo/mattermost-docker/tree/feature/hubot-matteruser) a fork of the [official Mattermost Docker Compose stack](https://github.com/mattermost/mattermost-docker) plugged to Hubot-Matteruser: 
+
 
 ## Installation
 
