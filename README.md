@@ -37,6 +37,46 @@ Try `hubot map me [NAME_OF_CITY]` to have Hubot reach out to Google Maps and bri
 
 ![s](https://cloud.githubusercontent.com/assets/177788/20645769/9d58a786-b41c-11e6-90b1-6a9e7ab19172.png)
 
+## Docker usage
+
+### Standalone
+
+Clone this repository, then build the Hubot-Matteruser container:
+
+```
+docker build --build-arg hubot_owner=<owner> \
+             --build-arg hubot_name=<name> \
+             --build-arg hubot_description=<desc> \
+             --tag=hubot-matteruser \
+             .
+```
+
+Start the container:
+
+```
+docker run -it \
+           --env MATTERMOST_HOST=<mm_host> \
+           --env MATTERMOST_GROUP=<mm_team> \
+           --env MATTERMOST_USER=<mm_user_email> \
+           --env MATTERMOST_PASSWORD=<mm_user_password> \
+           -p 8080:8080 \
+           --name hubot-matteruser \
+           hubot-matteruser
+```
+
+### Docker Compose
+
+To integrate with a running Mattermost instance, update docker-compose.yml accordingly and launch the bot:
+
+``` 
+docker-compose build
+docker-compose run -d
+```
+
+
+If you just want to test locally, you can find [here](https://github.com/banzo/mattermost-docker/tree/feature/hubot-matteruser) a fork of the [official Mattermost Docker Compose stack](https://github.com/mattermost/mattermost-docker) plugged to Hubot-Matteruser: 
+
+
 ## Installation
 
 ### 1) Install a Mattermost server

@@ -1,0 +1,23 @@
+version: "2"
+
+services:
+  hubot-matteruser:
+    build:
+     context: .
+     args:
+       hubot_owner: <CHANGEME>
+       hubot_name: <CHANGEME>
+       hubot_description: <CHANGEME>
+    restart: always
+    user: hubot-matteruser
+    ports:
+      - "8080:8080"
+    environment:
+      - MATTERMOST_HOST=<CHANGEME>
+      - MATTERMOST_GROUP=<CHANGEME>
+      - MATTERMOST_USER=<CHANGEME>
+      - MATTERMOST_PASSWORD=<CHANGEME>
+      - MATTERMOST_LOG_LEVEL=info
+      - MATTERMOST_USE_TLS=false
+      - MATTERMOST_TLS_VERIFY=false
+      - MATTERMOST_WSS_PORT=80
