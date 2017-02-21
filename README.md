@@ -85,7 +85,7 @@ Follow the [Mattermost install guides](https://docs.mattermost.com/guides/admini
 
 **IMPORTANT:** Make sure your `hubot-matteruser` and `mattermost-client` versions **match** the major version of your Mattermost server so the API versions will match. 
 
-For example, if you're using Mattermost server version 3.6.0 or 3.6.1, the _major version_ is "3.6", and you need version 3.5 of `hubot-matteruser` and `mattermost-client`. Neither version 3.5 or 3.7 will work, since the Mattermost server doesn't yet support API deprecation. See [releases archive](https://github.com/loafoe/hubot-matteruser/releases) for older versions. 
+For example, if you're using Mattermost server version 3.6.0 or 3.6.1, the _major version_ is "3.6", and you need version 3.6 of `hubot-matteruser` and `mattermost-client`. Neither version 3.5 or 3.7 will work, since the Mattermost server doesn't yet support API deprecation. See [releases archive](https://github.com/loafoe/hubot-matteruser/releases) for older versions. 
 
 ### 2) Install hubot-matteruser
 
