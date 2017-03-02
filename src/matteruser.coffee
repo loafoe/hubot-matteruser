@@ -158,7 +158,7 @@ class Matteruser extends Adapter
 
     message: (msg) =>
         if msg.data.sender_name in @mmIgnoreUsers
-          console.log('User %s is in MATTERMOST_IGNORE_USERS, ignoring them.', msg.data.sender_name)
+          @robot.logger.info "User #{msg.data.sender_name} is in MATTERMOST_IGNORE_USERS, ignoring them."
           return
 
         @robot.logger.debug msg
