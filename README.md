@@ -114,6 +114,7 @@ The adapter requires the following environment variables to be defined before yo
 | MATTERMOST\_USE\_TLS | No | (default: true) set to 'false' to switch to http/ws protocols |
 | MATTERMOST\_LOG\_LEVEL | No | (default: info) set log level (also: debug, ...) |
 | MATTERMOST\_REPLY | No | (default: true) set to 'false' to stop posting `reply` responses as comments |
+| MATTERMOST\_IGNORE\_USERS | No | (default: empty) Enter a comma-separated list of user sender_names to ignore. |
 
 #### Example configuration
 
