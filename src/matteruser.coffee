@@ -2,6 +2,11 @@
 
 MatterMostClient = require 'mattermost-client'
 
+class AttachmentMessage extends TextMessage
+
+    constructor: (@user, @text, @file_ids, @id) ->
+        super @user, @text, @id
+
 class Matteruser extends Adapter
 
     run: ->
@@ -177,7 +182,10 @@ class Matteruser extends Adapter
           user.mm.dm_channel_id = mmPost.channel_id
         @robot.logger.debug 'Text: ' + text
 
-        @receive new TextMessage user, text, mmPost.id
+        if mmPost.file_ids?
+            @receive new AttachmentMessage user, text, mmPost.file_ids, mmPost.id
+        else
+            @receive new TextMessage user, text, mmPost.id
         @robot.logger.debug "Message sent to hubot brain."
         return true
 
