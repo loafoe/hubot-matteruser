@@ -85,7 +85,7 @@ Follow the [Mattermost install guides](https://docs.mattermost.com/guides/admini
 
 **IMPORTANT:** Make sure your `hubot-matteruser` and `mattermost-client` versions **match** the major version of your Mattermost server so the API versions will match. 
 
-For example, if you're using Mattermost server version 3.7.1, the _major version_ is "3.7", and it is highly recommended to use version 3.7.x of `hubot-matteruser` and `mattermost-client`. See [releases archive](https://github.com/loafoe/hubot-matteruser/releases) for older versions. 
+For example, if you're using Mattermost server version 3.7.2, the _major version_ is "3.7", and it is highly recommended to use version 3.7.x of `hubot-matteruser` and `mattermost-client`. See [releases archive](https://github.com/loafoe/hubot-matteruser/releases) for older versions. 
 
 ### 2) Install hubot-matteruser
 
@@ -129,12 +129,12 @@ export MATTERMOST_PASSWORD=s3cr3tP@ssw0rd!
 
 ## Upgrade
 
-To upgrade your Hubot for Mattermost 3.7.x, find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `hubot-matteruser`. Change the verion so it points to `^3.7.1` of the client. Example:
+To upgrade your Hubot for Mattermost 3.7.x, find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `hubot-matteruser`. Change the verion so it points to `^3.7.2` of the client. Example:
 
   ```json
     ...
     "dependencies": {
-      "hubot-matteruser": "^3.7.1"
+      "hubot-matteruser": "^3.7.2"
     },
     ...
   ```
