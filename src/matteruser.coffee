@@ -9,6 +9,7 @@ class Matteruser extends Adapter
         mmUser = process.env.MATTERMOST_USER
         mmPassword = process.env.MATTERMOST_PASSWORD
         mmGroup = process.env.MATTERMOST_GROUP
+        mmToken = process.env.MATTERMOST_TOKEN or null
         mmWSSPort = process.env.MATTERMOST_WSS_PORT or '443'
         mmHTTPPort = process.env.MATTERMOST_HTTP_PORT or null
 
@@ -25,7 +26,7 @@ class Matteruser extends Adapter
             @robot.logger.emergency "MATTERMOST_GROUP is required"
             process.exit 1
 
-        @client = new MatterMostClient mmHost, mmGroup, mmUser, mmPassword, {wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000}
+        @client = new MatterMostClient mmHost, mmGroup, mmUser, mmPassword, {wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000, token: mmToken}
 
         @client.on 'open', @.open
         @client.on 'hello', @.onHello
