@@ -19,7 +19,7 @@ Creating a bot from scratch is easy:
 npm install -g yo generator-hubot
 yo hubot --adapter matteruser
   ```
-Follow the instructions to set up your bot. 
+Follow the instructions to set up your bot.
 
 ## Environment variables
 
@@ -31,6 +31,7 @@ The adapter requires the following environment variables to be defined before yo
 | MATTERMOST\_GROUP | Yes | The team/group on your Mattermost server e.g. _core_ |
 | MATTERMOST\_USER | Yes | The Mattermost user account name e.g. _hubot@yourcompany.com_ |
 | MATTERMOST\_PASSWORD | Yes | The password of the user e.g. _s3cr3tP@ssw0rd!_ |
+| MATTERMOST\_TOKEN | No | The authorization token of the user e.g. _hyr5dmb1mbb49c44qmx4whniso_ |
 | MATTERMOST\_WSS\_PORT | No | Overrides the default port `443` for  websocket (`wss://`) connections |
 | MATTERMOST\_HTTP\_PORT | No | Overrides the default port (`80` or `443`) for `http://` or `https://` connections |
 | MATTERMOST\_TLS\_VERIFY | No | (default: true) set to 'false' to allow connections when certs can not be verified (ex: self-signed, internal CA, ... - MITM risks) |
@@ -42,7 +43,7 @@ The adapter requires the following environment variables to be defined before yo
 The below example assumes you have created a user `hubot@yourcompany.com` with username `hubot` and password `s3cr3tP@ssw0rd!` on your Mattermost server in the `core` team reachable on URL `https://mm.yourcompany.com/core`
 
   ```sh
-export MATTERMOST_HOST=mm.yourcompany.com 
+export MATTERMOST_HOST=mm.yourcompany.com
 export MATTERMOST_GROUP=core
 export MATTERMOST_USER=hubot@yourcompany.com
 export MATTERMOST_PASSWORD=s3cr3tP@ssw0rd!
@@ -75,4 +76,3 @@ As the Mattermost API is still not stabilised this adapter does not attempt to b
 ## License
 
 The MIT License. See `LICENSE` file.
-
