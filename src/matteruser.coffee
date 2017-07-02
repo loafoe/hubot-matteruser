@@ -93,8 +93,8 @@ class Matteruser extends Adapter
         @robot.name = @self.username
         return true
 
-    profilesLoaded: =>
-        for id, user of @client.users
+    profilesLoaded: (profiles) =>
+        for id, user of profiles
             @userChange user
 
     brainLoaded: =>
