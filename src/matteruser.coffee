@@ -195,19 +195,25 @@ class Matteruser extends Adapter
         return true
 
     userAdded: (msg) =>
-        mmUser = @client.getUserByID msg.data.user_id
-        @userChange mmUser
-        user = @robot.brain.userForId mmUser.id
-        user.room = msg.broadcast.channel_id
-        @receive new EnterMessage user
-        return true
+        try
+          mmUser = @client.getUserByID msg.data.user_id
+          @userChange mmUser
+          user = @robot.brain.userForId mmUser.id
+          user.room = msg.broadcast.channel_id
+          @receive new EnterMessage user
+          return true
+        catch error
+          return false
 
     userRemoved: (msg) =>
-        mmUser = @client.getUserByID msg.data.user_id
-        user = @robot.brain.userForId mmUser.id
-        user.room = msg.broadcast.channel_id
-        @receive new LeaveMessage user
-        return true
+        try
+          mmUser = @client.getUserByID msg.data.user_id
+          user = @robot.brain.userForId mmUser.id
+          user.room = msg.broadcast.channel_id
+          @receive new LeaveMessage user
+          return true
+        catch error
+          return false
 
     slackAttachmentMessage: (data) =>
         return unless data.room
