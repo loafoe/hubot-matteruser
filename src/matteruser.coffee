@@ -42,6 +42,7 @@ class Matteruser extends Adapter
         @client.on 'profilesLoaded', @.profilesLoaded
         @client.on 'user_added', @.userAdded
         @client.on 'user_removed', @.userRemoved
+        @client.on 'typing', @.userTyping
         @client.on 'error', @.error
 
         @robot.brain.on 'loaded', @.brainLoaded
@@ -187,6 +188,10 @@ class Matteruser extends Adapter
         else
             @receive new TextMessage user, text, mmPost.id
         @robot.logger.debug "Message sent to hubot brain."
+        return true
+
+    userTyping: (msg) =>
+        @robot.logger.info 'Someone is typing...'
         return true
 
     userAdded: (msg) =>
