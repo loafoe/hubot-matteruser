@@ -81,11 +81,11 @@ If you just want to test locally, you can find [here](https://github.com/banzo/m
 
 ### 1) Install a Mattermost server
 
-Follow the [Mattermost install guides](https://docs.mattermost.com/guides/administrator.html#install-guides) to set up the latest version of Mattermost 3.9.x.
+Follow the [Mattermost install guides](https://docs.mattermost.com/guides/administrator.html#install-guides) to set up the latest version of Mattermost 3.10.x.
 
 **IMPORTANT:** Make sure your `hubot-matteruser` and `mattermost-client` versions **match** the major version of your Mattermost server so the API versions will match. 
 
-For example, if you're using Mattermost server version 3.9.0 the _major version_ is "3.9", and it is highly recommended to use version 3.9.x of `hubot-matteruser` and `mattermost-client`. See [releases archive](https://github.com/loafoe/hubot-matteruser/releases) for older versions. 
+For example, if you're using Mattermost server version 3.10.0 the _major version_ is "3.10", and it is highly recommended to use version 3.10.x of `hubot-matteruser` and `mattermost-client`. See [releases archive](https://github.com/loafoe/hubot-matteruser/releases) for older versions. 
 
 ### 2) Install hubot-matteruser
 
@@ -129,12 +129,12 @@ export MATTERMOST_PASSWORD=s3cr3tP@ssw0rd!
 
 ## Upgrade
 
-To upgrade your Hubot for Mattermost 3.9.x, find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `hubot-matteruser`. Change the verion so it points to `^3.9.1` of the client. Example:
+To upgrade your Hubot for Mattermost 3.10.x, find the `package.json` file in your Hubot directory and look for the line in the `dependencies` section that references `hubot-matteruser`. Change the verion so it points to `^3.10.0` of the client. Example:
 
   ```json
     ...
     "dependencies": {
-      "hubot-matteruser": "^3.9.1"
+      "hubot-matteruser": "^3.10.0"
     },
     ...
   ```
