@@ -42,6 +42,7 @@ class Matteruser extends Adapter
         @client.on 'profilesLoaded', @.profilesLoaded
         @client.on 'user_added', @.userAdded
         @client.on 'user_removed', @.userRemoved
+        @client.on 'typing', @.userTyping
         @client.on 'error', @.error
 
         @robot.brain.on 'loaded', @.brainLoaded
@@ -92,8 +93,8 @@ class Matteruser extends Adapter
         @robot.name = @self.username
         return true
 
-    profilesLoaded: =>
-        for id, user of @client.users
+    profilesLoaded: (profiles) =>
+        for id, user of profiles
             @userChange user
 
     brainLoaded: =>
@@ -189,20 +190,30 @@ class Matteruser extends Adapter
         @robot.logger.debug "Message sent to hubot brain."
         return true
 
-    userAdded: (msg) =>
-        mmUser = @client.getUserByID msg.data.user_id
-        @userChange mmUser
-        user = @robot.brain.userForId mmUser.id
-        user.room = msg.broadcast.channel_id
-        @receive new EnterMessage user
+    userTyping: (msg) =>
+        @robot.logger.info 'Someone is typing...'
         return true
 
+    userAdded: (msg) =>
+        try
+          mmUser = @client.getUserByID msg.data.user_id
+          @userChange mmUser
+          user = @robot.brain.userForId mmUser.id
+          user.room = msg.broadcast.channel_id
+          @receive new EnterMessage user
+          return true
+        catch error
+          return false
+
     userRemoved: (msg) =>
-        mmUser = @client.getUserByID msg.data.user_id
-        user = @robot.brain.userForId mmUser.id
-        user.room = msg.broadcast.channel_id
-        @receive new LeaveMessage user
-        return true
+        try
+          mmUser = @client.getUserByID msg.data.user_id
+          user = @robot.brain.userForId mmUser.id
+          user.room = msg.broadcast.channel_id
+          @receive new LeaveMessage user
+          return true
+        catch error
+          return false
 
     slackAttachmentMessage: (data) =>
         return unless data.room
