@@ -121,6 +121,7 @@ class Matteruser extends Adapter
 
         # Otherwise, create a new DM channel ID and message it.
         @client.getUserDirectMessageChannel user.id, (channel) =>
+            user.mm ?= {}
             user.mm.dm_channel_id = channel.id
             @client.postMessage(str, channel.id) for str in strings
 
@@ -158,6 +159,7 @@ class Matteruser extends Adapter
 
         # Otherwise, create a new DM channel ID and message it.
         @client.getUserDirectMessageChannel user.id, (channel) =>
+            user.mm ?= {}
             user.mm.dm_channel_id = channel.id
             postData.channel_id = channel.id
             @client.customMessage(postData, postData.channel_id)
@@ -180,6 +182,7 @@ class Matteruser extends Adapter
         if msg.data.channel_type == 'D'
           if !///^@?#{@robot.name} ///i.test(text) # Direct message
             text = "#{@robot.name} #{text}"
+          user.mm ?= {}
           user.mm.dm_channel_id = mmPost.channel_id
         @robot.logger.debug 'Text: ' + text
 
