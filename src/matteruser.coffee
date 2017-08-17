@@ -7,6 +7,40 @@ class AttachmentMessage extends TextMessage
     constructor: (@user, @text, @file_ids, @id) ->
         super @user, @text, @id
 
+# A TextMessage class that adds `msg.props` for Mattermost's properties.
+#
+# Text fields from message attachments are appended in @text for matching.
+# <https://docs.mattermost.com/developer/message-attachments.html>
+# The result is that `bot.hear()` will match against these attachment fields.
+#
+# As well, it is possible that some bot handlers could make use of other
+# fields on `msg.props`.
+#
+# Example raw props:
+#   {
+#       "attachments": [...],
+#       "from_webhook": "true",
+#       "override_username": "trenthere"
+#   }
+class TextAndPropsMessage extends TextMessage
+
+    constructor: (@user, @text, @props, @id) ->
+        @origText = @text
+        if @props.attachments?
+            separator = '\n\n--\n\n'
+            for attachment in @props.attachments
+                parts = []
+                for field in ['pretext', 'title', 'text']
+                    if attachment[field]
+                        parts.push(attachment[field])
+                if parts.length
+                    @text += separator + parts.join '\n\n'
+
+        super @user, @text, @id
+
+    match: (regex) ->
+        @text.match regex
+
 class Matteruser extends Adapter
 
     run: ->
@@ -188,6 +222,9 @@ class Matteruser extends Adapter
 
         if mmPost.file_ids?
             @receive new AttachmentMessage user, text, mmPost.file_ids, mmPost.id
+        # If there are interesting props, then include them for bot handlers.
+        else if mmPost.props?.attachments?
+            @receive new TextAndPropsMessage user, text, mmPost.props, mmPost.id
         else
             @receive new TextMessage user, text, mmPost.id
         @robot.logger.debug "Message sent to hubot brain."
