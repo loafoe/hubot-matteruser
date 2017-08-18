@@ -210,7 +210,8 @@ class Matteruser extends Adapter
 
         user = @robot.brain.userForId mmPost.user_id
         user.room = mmPost.channel_id
-
+        user.room_name = msg.data.channel_display_name
+        
         text = mmPost.message
         if msg.data.channel_type == 'D'
           if !///^@?#{@robot.name} ///i.test(text) # Direct message
