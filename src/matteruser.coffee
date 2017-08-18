@@ -170,7 +170,7 @@ class Matteruser extends Adapter
         postData.root_id = envelope.message.id
         postData.parent_id = postData.root_id
 
-        postData.create_at = Date.now()
+        postData.create_at = 0
         postData.user_id = @self.id
         postData.filename = []
         # Check if the target room is also a user's username
