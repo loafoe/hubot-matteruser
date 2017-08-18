@@ -124,7 +124,6 @@ class Matteruser extends Adapter
     loggedIn: (user) =>
         @robot.logger.info 'Logged in as user "'+user.username+'" but not connected yet.'
         @self = user
-        @robot.name = @self.username
         return true
 
     profilesLoaded: (profiles) =>
