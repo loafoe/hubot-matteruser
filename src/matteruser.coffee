@@ -211,7 +211,7 @@ class Matteruser extends Adapter
         user = @robot.brain.userForId mmPost.user_id
         user.room = mmPost.channel_id
         user.room_name = msg.data.channel_display_name
-        
+
         text = mmPost.message
         if msg.data.channel_type == 'D'
           if !///^@?#{@robot.name} ///i.test(text) # Direct message
@@ -257,6 +257,11 @@ class Matteruser extends Adapter
 
     slackAttachmentMessage: (data) =>
         return unless data.room
+
+        # Convert data.room to channel_id in case it's a room name
+        channelInfo = @client.findChannelByName(data.room)
+        if channelInfo != null
+            data.room = channelInfo.id
         msg = {}
         msg.text = data.text
         msg.type = "slack_attachment"
