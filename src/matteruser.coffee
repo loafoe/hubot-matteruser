@@ -236,6 +236,9 @@ class Matteruser extends Adapter
         return true
 
     userAdded: (msg) =>
+        # update channels when this bot is added to a new channel
+        if msg.data.user_id == @self.id
+          @client.loadChannels()
         try
           mmUser = @client.getUserByID msg.data.user_id
           @userChange mmUser
@@ -247,6 +250,9 @@ class Matteruser extends Adapter
           return false
 
     userRemoved: (msg) =>
+        # update channels when this bot is removed from a channel
+        if msg.broadcast.user_id == @self.id
+          @client.loadChannels()
         try
           mmUser = @client.getUserByID msg.data.user_id
           user = @robot.brain.userForId mmUser.id
