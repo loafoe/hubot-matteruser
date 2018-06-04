@@ -1,4 +1,4 @@
-FROM node:argon
+FROM node:9
 
 ARG hubot_owner
 ARG hubot_description
