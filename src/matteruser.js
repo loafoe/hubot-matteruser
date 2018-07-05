@@ -258,7 +258,8 @@ class Matteruser extends Adapter {
             user.mm.dm_channel_id = channel.id;
             return (() => {
                 const result = [];
-                for (str of Array.from(strings)) {                     result.push(this.client.postMessage(str, channel.id));
+                for (str of Array.from(strings)) {
+                    result.push(this.client.postMessage(str, channel.id));
                 }
                 return result;
             })();

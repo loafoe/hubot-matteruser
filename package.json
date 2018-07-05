@@ -23,12 +23,9 @@
     "url": "https://github.com/loafoe/hubot-matteruser/issues",
     "email": "support@aemian.com"
   },
-  "devDependencies": {
-    "coffee-script": "~1.7.1"
-  },
   "main": "./src/matteruser",
   "dependencies": {
-    "mattermost-client": "^4.4.0",
+    "mattermost-client": "git://github.com/HP41/mattermost-client.git#es6",
     "parent-require": "^1.0.0",
     "q": "^1.4.1"
   }
