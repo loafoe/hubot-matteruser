@@ -1,34 +1,14 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
-/*
- * decaffeinate suggestions:
- * DS001: Remove Babel/TypeScript constructor workaround
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS103: Rewrite code to no longer use __guard__
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-const {Robot,Adapter,TextMessage,User,EnterMessage,LeaveMessage} = require('hubot');
+const { Adapter,
+        TextMessage,
+        EnterMessage,
+        LeaveMessage } = require('hubot');
 
 const MatterMostClient = require('mattermost-client');
 
 class AttachmentMessage extends TextMessage {
 
     constructor(user, text, file_ids, id) {
-        {
-          // Hack: trick Babel/TypeScript into allowing this before super.
-          if (false) { super(); }
-          let thisFn = (() => { return this; }).toString();
-          let thisName = thisFn.slice(thisFn.indexOf('return') + 6 + 1, thisFn.indexOf(';')).trim();
-          eval(`${thisName} = this;`);
-        }
-        this.user = user;
-        this.text = text;
-        this.file_ids = file_ids;
-        this.id = id;
-        super(this.user, this.text, this.id);
+        super(user, text, id);
     }
 }
 
@@ -50,21 +30,12 @@ class AttachmentMessage extends TextMessage {
 class TextAndPropsMessage extends TextMessage {
 
     constructor(user, text, props, id) {
-        {
-          // Hack: trick Babel/TypeScript into allowing this before super.
-          if (false) { super(); }
-          let thisFn = (() => { return this; }).toString();
-          let thisName = thisFn.slice(thisFn.indexOf('return') + 6 + 1, thisFn.indexOf(';')).trim();
-          eval(`${thisName} = this;`);
-        }
-        this.user = user;
-        this.text = text;
+        super(user, text, id);
         this.props = props;
-        this.id = id;
         this.origText = this.text;
-        if (this.props.attachments != null) {
+        if (this.props.attachments) {
             const separator = '\n\n--\n\n';
-            for (let attachment of Array.from(this.props.attachments)) {
+            for (let attachment of this.props.attachments) {
                 const parts = [];
                 for (let field of ['pretext', 'title', 'text']) {
                     if (attachment[field]) {
@@ -76,8 +47,6 @@ class TextAndPropsMessage extends TextMessage {
                 }
             }
         }
-
-        super(this.user, this.text, this.id);
     }
 
     match(regex) {
@@ -86,30 +55,6 @@ class TextAndPropsMessage extends TextMessage {
 }
 
 class Matteruser extends Adapter {
-
-    constructor(...args) {
-        {
-          // Hack: trick Babel/TypeScript into allowing this before super.
-          if (false) { super(); }
-          let thisFn = (() => { return this; }).toString();
-          let thisName = thisFn.slice(thisFn.indexOf('return') + 6 + 1, thisFn.indexOf(';')).trim();
-          eval(`${thisName} = this;`);
-        }
-        this.open = this.open.bind(this);
-        this.error = this.error.bind(this);
-        this.onConnected = this.onConnected.bind(this);
-        this.onHello = this.onHello.bind(this);
-        this.userChange = this.userChange.bind(this);
-        this.loggedIn = this.loggedIn.bind(this);
-        this.profilesLoaded = this.profilesLoaded.bind(this);
-        this.brainLoaded = this.brainLoaded.bind(this);
-        this.message = this.message.bind(this);
-        this.userTyping = this.userTyping.bind(this);
-        this.userAdded = this.userAdded.bind(this);
-        this.userRemoved = this.userRemoved.bind(this);
-        this.slackAttachmentMessage = this.slackAttachmentMessage.bind(this);
-        super(...args);
-    }
 
     run() {
         const mmHost = process.env.MATTERMOST_HOST;
@@ -180,8 +125,7 @@ class Matteruser extends Adapter {
     }
 
     userChange(user) {
-        let value;
-        if ((user != null ? user.id : undefined) == null) { return; }
+        if (!user || (user.id == null)) { return; }
         this.robot.logger.debug(`Adding user ${user.id}`);
         const newUser = {
             name: user.username,
@@ -189,8 +133,13 @@ class Matteruser extends Adapter {
             email_address: user.email,
             mm: {}
         };
+
         // Preserve the DM channel ID if it exists
-        newUser.mm.dm_channel_id = __guard__(this.robot.brain.userForId(user.id).mm, x => x.dm_channel_id);
+        let user_obj = this.robot.brain.userForId(user.id);
+        newUser.mm.dm_channel_id = undefined;
+        if ("mm" in user_obj) { newUser.mm.dm_channel_id = user_obj.mm.dm_channel_id };
+
+        let value;
         for (var key in user) {
             value = user[key];
             newUser.mm[key] = value;
@@ -241,34 +190,33 @@ class Matteruser extends Adapter {
         // If it's not, continue as normal
         if (!user) {
             const channel = this.client.findChannelByName(envelope.room);
-            for (str of Array.from(strings)) { this.client.postMessage(str, (channel != null ? channel.id : undefined) || envelope.room); }
-            return;
+            let channel_id = channel ? channel.id : undefined;
+
+            strings.forEach( (str) => this.client.postMessage(str, 
+                                                            (channel_id || envelope.room)) );
         }
 
         // If it is, we assume they want to DM that user
         // Message their DM channel ID if it already exists.
-        if ((user.mm != null ? user.mm.dm_channel_id : undefined) != null) {
-            for (str of Array.from(strings)) { this.client.postMessage(str, user.mm.dm_channel_id); }
-            return;
+        let dm_channel_id = user.mm
+                            ? (user.mm.dm_channel_id ? user.mm.dm_channel_id : undefined)
+                            : undefined
+        if (dm_channel_id != null) {
+            strings.forEach( (str) => this.client.postMessage(str, dm_channel_id) );
         }
 
         // Otherwise, create a new DM channel ID and message it.
-        return this.client.getUserDirectMessageChannel(user.id, channel => {
-            if (user.mm == null) { user.mm = {}; }
+        this.client.getUserDirectMessageChannel(user.id, channel => {
+            if (!user.mm) { user.mm = {}; }
             user.mm.dm_channel_id = channel.id;
-            return (() => {
-                const result = [];
-                for (str of Array.from(strings)) {
-                    result.push(this.client.postMessage(str, channel.id));
-                }
-                return result;
-            })();
+            
+            strings.forEach( (str) => this.client.postMessage(str, channel.id) );
         });
     }
 
     reply(envelope, ...strings) {
         if (this.mmNoReply) {
-          return this.send(envelope, ...Array.from(strings));
+          return this.send(envelope, ...strings);
       }
 
         strings = strings.map(s => `@${envelope.user.name} ${s}`);
@@ -288,14 +236,14 @@ class Matteruser extends Adapter {
         // If it's not, continue as normal
         if (!user) {
             const channel = this.client.findChannelByName(envelope.room);
-            postData.channel_id = (channel != null ? channel.id : undefined) || envelope.room;
+            postData.channel_id = (channel ? channel.id : undefined) || envelope.room;
             this.client.customMessage(postData, postData.channel_id);
             return;
         }
 
         // If it is, we assume they want to DM that user
         // Message their DM channel ID if it already exists.
-        if ((user.mm != null ? user.mm.dm_channel_id : undefined) != null) {
+        if ((user.mm ? user.mm.dm_channel_id : undefined) != null) {
             postData.channel_id = user.mm.dm_channel_id;
             this.client.customMessage(postData, postData.channel_id);
             return;
@@ -303,7 +251,7 @@ class Matteruser extends Adapter {
 
         // Otherwise, create a new DM channel ID and message it.
         return this.client.getUserDirectMessageChannel(user.id, channel => {
-            if (user.mm == null) { user.mm = {}; }
+            if (!user.mm) { user.mm = {}; }
             user.mm.dm_channel_id = channel.id;
             postData.channel_id = channel.id;
             return this.client.customMessage(postData, postData.channel_id);
@@ -311,7 +259,7 @@ class Matteruser extends Adapter {
     }
 
     message(msg) {
-        if (Array.from(this.mmIgnoreUsers).includes(msg.data.sender_name)) {
+        if (this.mmIgnoreUsers.includes(msg.data.sender_name)) {
           this.robot.logger.info(`User ${msg.data.sender_name} is in MATTERMOST_IGNORE_USERS, ignoring them.`);
           return;
       }
@@ -332,15 +280,15 @@ class Matteruser extends Adapter {
           if (!new RegExp(`^@?${this.robot.name}`, 'i').test(text)) { // Direct message
             text = `${this.robot.name} ${text}`;
         }
-          if (user.mm == null) { user.mm = {}; }
+          if (!user.mm) { user.mm = {}; }
           user.mm.dm_channel_id = mmPost.channel_id;
       }
         this.robot.logger.debug(`Text: ${text}`);
 
-        if (mmPost.file_ids != null) {
+        if (mmPost.file_ids) {
             this.receive(new AttachmentMessage(user, text, mmPost.file_ids, mmPost.id));
         // If there are interesting props, then include them for bot handlers.
-        } else if ((mmPost.props != null ? mmPost.props.attachments : undefined) != null) {
+        } else if ( mmPost.props ? mmPost.props.attachments : undefined ) {
             this.receive(new TextAndPropsMessage(user, text, mmPost.props, mmPost.id));
         } else {
             this.receive(new TextMessage(user, text, mmPost.id));
@@ -405,7 +353,7 @@ class Matteruser extends Adapter {
         if (data.username && (data.username !== this.robot.name)) {
             msg.as_user = false;
             msg.username = data.username;
-            if (data.icon_url != null) {
+            if (data.icon_url) {
                 msg.icon_url = data.icon_url;
             } else if (data.icon_emoji != null) {
                 msg.icon_emoji = data.icon_emoji;
@@ -418,8 +366,7 @@ class Matteruser extends Adapter {
     }
 
     changeHeader(channel, header) {
-        if (channel == null) { return; }
-        if (header == null) { return; }
+        if (channel == null || header == null) { return; }
 
         const channelInfo = this.client.findChannelByName(channel);
 
@@ -430,7 +377,3 @@ class Matteruser extends Adapter {
 }
 
 exports.use = robot => new Matteruser(robot);
-
-function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
-}
