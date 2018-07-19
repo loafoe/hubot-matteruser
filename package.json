@@ -24,7 +24,6 @@
   },
   "main": "./src/matteruser.js",
   "dependencies": {
-    "coffee-script": "1.6.3",
     "mattermost-client": "^5.0.0",
     "parent-require": "^1.0.0",
     "q": "^1.4.1"
