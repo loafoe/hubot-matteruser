@@ -25,9 +25,9 @@
   "main": "./src/matteruser.js",
   "dependencies": {
     "coffee-script": "1.6.3",
+    "mattermost-client": "^5.0.0",
     "parent-require": "^1.0.0",
-    "q": "^1.4.1",
-    "mattermost-client": "git://github.com/HP41/mattermost-client.git#es6"
+    "q": "^1.4.1"
   },
   "peerDependencies": {
     "hubot": ">=3.0.1"
