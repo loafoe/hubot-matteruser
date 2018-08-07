@@ -11,7 +11,6 @@
     "hubot",
     "adapter",
     "mattermost",
-    "slack",
     "chat"
   ],
   "license": "MIT",
@@ -23,13 +22,13 @@
     "url": "https://github.com/loafoe/hubot-matteruser/issues",
     "email": "support@aemian.com"
   },
-  "devDependencies": {
-    "coffee-script": "~1.7.1"
-  },
-  "main": "./src/matteruser",
+  "main": "./src/matteruser.js",
   "dependencies": {
-    "mattermost-client": "^4.4.0",
+    "mattermost-client": "^5.0.0",
     "parent-require": "^1.0.0",
     "q": "^1.4.1"
+  },
+  "peerDependencies": {
+    "hubot": ">=3.0.1"
   }
 }
