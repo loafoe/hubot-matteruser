@@ -117,7 +117,7 @@ run() {
 
     this.robot.brain.on('loaded', this.brainLoaded);
 
-    if mmAccesToken != null {
+    if (mmAccessToken != null) {
       return this.client.tokenLogin(mmAccessToken);
     }
     return this.client.login(mmUser, mmPassword);
@@ -156,7 +156,7 @@ userChange(user) {
     // Preserve the DM channel ID if it exists
     let user_obj = this.robot.brain.userForId(user.id);
     newUser.mm.dm_channel_id = undefined;
-    if ("mm" in user_obj) { newUser.mm.dm_channel_id = user_obj.mm.dm_channel_id };
+    if ("mm" in user_obj) { newUser.mm.dm_channel_id = user_obj.mm.dm_channel_id }
 
     let value;
     for (var key in user) {
@@ -209,7 +209,6 @@ send(envelope, ...strings) {
     // If it's not, continue as normal
     if (!user) {
         const channel = this.client.findChannelByName(envelope.room);
-        let channel_id = channel ? channel.id : undefined;
 
         for (str of strings) {
             this.client.postMessage(str,
@@ -295,7 +294,6 @@ message(msg) {
 
     this.robot.logger.debug(msg);
     const mmPost = JSON.parse(msg.data.post);
-    const mmUser = this.client.getUserByID(mmPost.user_id);
     if (mmPost.user_id === this.self.id) { return; } // Ignore our own output
     this.robot.logger.debug(`From: ${mmPost.user_id}, To: ${this.self.id}`);
 
@@ -306,12 +304,12 @@ message(msg) {
 
     let text = mmPost.message;
     if (msg.data.channel_type === 'D') {
-      if (!new RegExp(`^@?${this.robot.name}`, 'i').test(text)) { // Direct message
-        text = `${this.robot.name} ${text}`;
+        if (!new RegExp(`^@?${this.robot.name}`, 'i').test(text)) { // Direct message
+          text = `${this.robot.name} ${text}`;
+        }
+        if (!user.mm) { user.mm = {}; }
+        user.mm.dm_channel_id = mmPost.channel_id;
     }
-      if (!user.mm) { user.mm = {}; }
-      user.mm.dm_channel_id = mmPost.channel_id;
-  }
     this.robot.logger.debug(`Text: ${text}`);
 
     if (mmPost.file_ids) {
