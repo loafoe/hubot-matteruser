@@ -76,11 +76,12 @@ constructor(...args) {
 
 run() {
     const mmHost = process.env.MATTERMOST_HOST;
-    const mmUser = process.env.MATTERMOST_USER;
+    const mmUser = process.env.MATTERMOST_USER || null;
     const mmPassword = process.env.MATTERMOST_PASSWORD;
     const mmGroup = process.env.MATTERMOST_GROUP;
     const mmWSSPort = process.env.MATTERMOST_WSS_PORT || '443';
     const mmHTTPPort = process.env.MATTERMOST_HTTP_PORT || null;
+    const mmAccessToken = process.env.MATTERMOST_ACCESS_TOKEN || null;
     this.mmNoReply = process.env.MATTERMOST_REPLY === 'false';
     this.mmIgnoreUsers = (process.env.MATTERMOST_IGNORE_USERS != null ? process.env.MATTERMOST_IGNORE_USERS.split(',') : undefined) || [];
 
@@ -88,11 +89,11 @@ run() {
         this.robot.logger.emergency("MATTERMOST_HOST is required");
         process.exit(1);
     }
-    if (mmUser == null) {
-        this.robot.logger.emergency("MATTERMOST_USER is required");
+    if (mmUser == null && mmAccessToken == null) {
+        this.robot.logger.emergency("MATTERMOST_USER or MATTERMOST_ACCESS_TOKEN is required");
         process.exit(1);
     }
-    if (mmPassword == null) {
+    if (mmPassword == null && mmAccessToken != null) {
         this.robot.logger.emergency("MATTERMOST_PASSWORD is required");
         process.exit(1);
     }
@@ -101,7 +102,7 @@ run() {
         process.exit(1);
     }
 
-    this.client = new MatterMostClient(mmHost, mmGroup, mmUser, mmPassword, {wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000});
+    this.client = new MatterMostClient(mmHost, mmGroup, {wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000});
 
     this.client.on('open', this.open);
     this.client.on('hello', this.onHello);
@@ -116,7 +117,10 @@ run() {
 
     this.robot.brain.on('loaded', this.brainLoaded);
 
-    return this.client.login();
+    if mmAccesToken != null {
+      return this.client.tokenLogin(mmAccessToken);
+    }
+    return this.client.login(mmUser, mmPassword);
 }
 
 open() {
@@ -208,8 +212,8 @@ send(envelope, ...strings) {
         let channel_id = channel ? channel.id : undefined;
 
         for (str of strings) {
-            this.client.postMessage(str, 
-                                    (channel || envelope.room)); 
+            this.client.postMessage(str,
+                                    (channel || envelope.room));
         }
     } else {
         // If it is, we assume they want to DM that user
@@ -220,7 +224,7 @@ send(envelope, ...strings) {
 
         if (dm_channel_id != null) {
             for (str of strings) {
-                this.client.postMessage(str, user.mm.dm_channel_id); 
+                this.client.postMessage(str, user.mm.dm_channel_id);
             }
 
         } else {
@@ -299,7 +303,7 @@ message(msg) {
     user.room = mmPost.channel_id;
     user.room_name = msg.data.channel_display_name;
     user.channel_type = msg.data.channel_type;
-    
+
     let text = mmPost.message;
     if (msg.data.channel_type === 'D') {
       if (!new RegExp(`^@?${this.robot.name}`, 'i').test(text)) { // Direct message

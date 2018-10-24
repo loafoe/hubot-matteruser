@@ -24,7 +24,7 @@
   },
   "main": "./src/matteruser.js",
   "dependencies": {
-    "mattermost-client": "^5.0.0",
+    "mattermost-client": "git://github.com/loafoe/mattermost-client.git#feature/personal-access-token-support",
     "parent-require": "^1.0.0",
     "q": "^1.4.1"
   },
