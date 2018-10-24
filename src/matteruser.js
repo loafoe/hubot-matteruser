@@ -93,7 +93,7 @@ run() {
         this.robot.logger.emergency("MATTERMOST_USER or MATTERMOST_ACCESS_TOKEN is required");
         process.exit(1);
     }
-    if (mmPassword == null && mmAccessToken != null) {
+    if (mmPassword == null && mmAccessToken == null) {
         this.robot.logger.emergency("MATTERMOST_PASSWORD is required");
         process.exit(1);
     }
