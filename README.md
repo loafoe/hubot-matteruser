@@ -44,7 +44,7 @@ Try `hubot map me [NAME_OF_CITY]` to have Hubot reach out to Google Maps and bri
 Clone this repository, then build the Hubot-Matteruser container:
 
 ```
-docker build --build-arg hubot_owner=<owner> \
+$ docker build --build-arg hubot_owner=<owner> \
              --build-arg hubot_name=<name> \
              --build-arg hubot_description=<desc> \
              --tag=hubot-matteruser \
@@ -54,11 +54,23 @@ docker build --build-arg hubot_owner=<owner> \
 Start the container:
 
 ```
-docker run -it \
+$ docker run -it \
            --env MATTERMOST_HOST=<mm_host> \
            --env MATTERMOST_GROUP=<mm_team> \
            --env MATTERMOST_USER=<mm_user_email> \
            --env MATTERMOST_PASSWORD=<mm_user_password> \
+           -p 8080:8080 \
+           --name hubot-matteruser \
+           hubot-matteruser
+```
+
+or if you have a personal access token:
+
+```
+$ docker run -it \
+           --env MATTERMOST_HOST=<mm_host> \
+           --env MATTERMOST_GROUP=<mm_team> \
+           --env MATTERMOST_ACCESS_TOKEN=<personal>
            -p 8080:8080 \
            --name hubot-matteruser \
            hubot-matteruser
@@ -106,8 +118,9 @@ The adapter requires the following environment variables to be defined before yo
 |----------|----------|-------------|
 | MATTERMOST\_HOST | Yes | The Mattermost host e.g. _mm.yourcompany.com_ |
 | MATTERMOST\_GROUP | Yes | The team/group on your Mattermost server e.g. _core_ |
-| MATTERMOST\_USER | Yes | The Mattermost user account name e.g. _hubot@yourcompany.com_ |
-| MATTERMOST\_PASSWORD | Yes | The password of the user e.g. _s3cr3tP@ssw0rd!_ |
+| MATTERMOST\_USER | No | The Mattermost user account name e.g. _hubot@yourcompany.com_ |
+| MATTERMOST\_PASSWORD | No | The password of the user e.g. _s3cr3tP@ssw0rd!_ |
+| MATTERMOST\_ACCESS\_TOKEN | No | The personal access token of the user |
 | MATTERMOST\_WSS\_PORT | No | Overrides the default port `443` for  websocket (`wss://`) connections |
 | MATTERMOST\_HTTP\_PORT | No | Overrides the default port (`80` or `443`) for `http://` or `https://` connections |
 | MATTERMOST\_TLS\_VERIFY | No | (default: true) set to 'false' to allow connections when certs can not be verified (ex: self-signed, internal CA, ... - MITM risks) |
