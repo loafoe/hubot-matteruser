@@ -325,7 +325,7 @@ message(msg) {
 }
 
 userTyping(msg) {
-    this.robot.logger.info('Someone is typing...');
+    this.robot.logger.info('Someone is typing...', msg);
     return true;
 }
 
