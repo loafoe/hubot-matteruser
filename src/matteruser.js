@@ -209,10 +209,11 @@ send(envelope, ...strings) {
     // If it's not, continue as normal
     if (!user) {
         const channel = this.client.findChannelByName(envelope.room);
+        const channel_id = channel ? channel.id : undefined;
 
         for (str of strings) {
             this.client.postMessage(str,
-                                    (channel || envelope.room));
+                                    (channel_id || envelope.room));
         }
     } else {
         // If it is, we assume they want to DM that user
