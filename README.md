@@ -6,7 +6,7 @@
 
 **Hubot** is "chat bot" created by GitHub that listens for commands and executes actions based on your requests. 
 
-`hubot-matteruser` is a Hubot adapter for [Mattermost](https://about.mattermost.com/) written in coffee script that uses the Mattermost [Web Services API](https://api.mattermost.com/) and WebSockets to deliver Hubot functionality. 
+`hubot-matteruser` is a Hubot adapter for [Mattermost](https://about.mattermost.com/) written in Javascript that uses the Mattermost [Web Services API](https://api.mattermost.com/) and WebSockets to deliver Hubot functionality. 
 
 - Learn more about [Hubot in Wired Magazine](https://www.wired.com/2015/10/the-most-important-startups-hardest-worker-isnt-a-person/)
 - Learn more about [Mattermost as an open source, self-hosted team communication server](https://about.mattermost.com/)
