@@ -78,6 +78,7 @@ run() {
     const mmHost = process.env.MATTERMOST_HOST;
     const mmUser = process.env.MATTERMOST_USER || null;
     const mmPassword = process.env.MATTERMOST_PASSWORD;
+    const mmMFAToken = process.env.MATTERMOST_MFA_TOKEN || null;
     const mmGroup = process.env.MATTERMOST_GROUP;
     const mmWSSPort = process.env.MATTERMOST_WSS_PORT || '443';
     const mmHTTPPort = process.env.MATTERMOST_HTTP_PORT || null;
@@ -120,7 +121,7 @@ run() {
     if (mmAccessToken != null) {
       return this.client.tokenLogin(mmAccessToken);
     }
-    return this.client.login(mmUser, mmPassword);
+    return this.client.login(mmUser, mmPassword, mmMFAToken);
 }
 
 open() {
