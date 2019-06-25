@@ -269,6 +269,7 @@ reply(envelope, ...strings) {
         const channel = this.client.findChannelByName(envelope.room);
         postData.channel_id = (channel ? channel.id : undefined) || envelope.room;
         this.client.customMessage(postData, postData.channel_id);
+        return;
     }
 
     // If it is, we assume they want to DM that user
