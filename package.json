@@ -1,6 +1,6 @@
 {
   "name": "hubot-matteruser",
-  "version": "5.3.0",
+  "version": "5.3.1",
   "author": {
     "name": "Andy Lo-A-Foe",
     "url": "https://aemian.com/"
@@ -26,6 +26,7 @@
   "dependencies": {
     "mattermost-client": "^6.1.1",
     "parent-require": "^1.0.0",
+    "ws": ">=3.3.1",
     "q": "^1.4.1"
   },
   "peerDependencies": {
