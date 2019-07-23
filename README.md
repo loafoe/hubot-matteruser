@@ -15,6 +15,14 @@
 
 This [Hubot](https://github.com/github/hubot) adapter connects to your Mattermost server. You can invite your bot to any channel just as a regular user. It listens and perform your commands. The adapter uses [mattermost-client](https://github.com/loafoe/mattermost-client) for all low level Mattermost communication.
 
+Two authentication methods are supported:
+
+* login/password,
+* [personnal access token](https://docs.mattermost.com/developer/personal-access-tokens.html).
+
+The second one is necessary if the Mattermost server delegates the authentication to another service (for example when using Mattermost shiped with [Gitlab](http://www.gitlab.com)).
+Such method is also probably prefered as the token does not reveals original credentials and can be revoked without any impact on the related account.
+
 ## Docker usage
 
 ### Standalone
@@ -95,7 +103,7 @@ The adapter requires the following environment variables to be defined before yo
 | MATTERMOST\_GROUP | Yes | The team/group on your Mattermost server e.g. _core_ |
 | MATTERMOST\_USER | No | The Mattermost user account name e.g. _hubot@yourcompany.com_ |
 | MATTERMOST\_PASSWORD | No | The password of the user e.g. _s3cr3tP@ssw0rd!_ |
-| MATTERMOST\_ACCESS\_TOKEN | No | The personal access token of the user |
+| MATTERMOST\_ACCESS\_TOKEN | No | The [personal access token](https://docs.mattermost.com/developer/personal-access-tokens.html) of the user |
 | MATTERMOST\_WSS\_PORT | No | Overrides the default port `443` for  websocket (`wss://`) connections |
 | MATTERMOST\_HTTP\_PORT | No | Overrides the default port (`80` or `443`) for `http://` or `https://` connections |
 | MATTERMOST\_TLS\_VERIFY | No | (default: true) set to 'false' to allow connections when certs can not be verified (ex: self-signed, internal CA, ... - MITM risks) |
