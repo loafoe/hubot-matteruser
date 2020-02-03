@@ -83,6 +83,7 @@ run() {
     const mmWSSPort = process.env.MATTERMOST_WSS_PORT || '443';
     const mmHTTPPort = process.env.MATTERMOST_HTTP_PORT || null;
     const mmAccessToken = process.env.MATTERMOST_ACCESS_TOKEN || null;
+    const mmHTTPProxy = process.env.http_proxy || null;
     this.mmNoReply = process.env.MATTERMOST_REPLY === 'false';
     this.mmIgnoreUsers = (process.env.MATTERMOST_IGNORE_USERS != null ? process.env.MATTERMOST_IGNORE_USERS.split(',') : undefined) || [];
 
@@ -103,7 +104,7 @@ run() {
         process.exit(1);
     }
 
-    this.client = new MatterMostClient(mmHost, mmGroup, {wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000});
+    this.client = new MatterMostClient(mmHost, mmGroup, {wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000, httpProxy: mmHTTPProxy});
 
     this.client.on('open', this.open);
     this.client.on('hello', this.onHello);
