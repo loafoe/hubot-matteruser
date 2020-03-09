@@ -250,13 +250,12 @@ reply(envelope, ...strings) {
       return this.send(envelope, ...strings);
     }
 
-    strings = strings.map(s => `@${envelope.user.name} ${s}`);
     const postData = {};
     postData.message = strings[0];
 
     // Set the comment relationship
-    postData.root_id = envelope.message.id;
-    postData.parent_id = postData.root_id;
+    postData.root_id = envelope.user.id || envelope.message.id;
+    postData.parent_id = envelope.message.id;
 
     postData.create_at = 0;
     postData.user_id = this.self.id;
@@ -304,6 +303,7 @@ message(msg) {
     user.room = mmPost.channel_id;
     user.room_name = msg.data.channel_display_name;
     user.channel_type = msg.data.channel_type;
+    user.root_id = mmPost.root_id;
 
     let text = mmPost.message;
     if (msg.data.channel_type === 'D') {
