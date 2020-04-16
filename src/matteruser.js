@@ -245,6 +245,49 @@ send(envelope, ...strings) {
         }
     }
 }
+  
+cmd(envelope, ...strings) {
+    // Check if the target room is also a user's username
+    let str;
+    const user = this.robot.brain.userForName(envelope.room);
+
+    // If it's not, continue as normal
+    if (!user) {
+        const channel = this.client.findChannelByName(envelope.room);
+        const channel_id = channel ? channel.id : undefined;
+
+        for (str of strings) {
+            this.client.postCommand((channel_id || envelope.room),
+                                    str);
+        }
+    } else {
+        // If it is, we assume they want to DM that user
+        // Message their DM channel ID if it already exists.
+        let dm_channel_id = user.mm
+                            ? (user.mm.dm_channel_id ? user.mm.dm_channel_id : undefined)
+                            : undefined
+
+        if (dm_channel_id != null) {
+            for (str of strings) {
+                this.client.postCommand(user.mm.dm_channel_id, str);
+            }
+
+        } else {
+
+            let self = this
+
+            // Otherwise, create a new DM channel ID and message it.
+            this.client.getUserDirectMessageChannel(user.id, channel => {
+                if (!user.mm) { user.mm = {}; }
+                user.mm.dm_channel_id = channel.id;
+
+                for (str of strings) {
+                    self.client.postCommand(channel.id,str);
+                }
+            });
+        }
+    }
+}
 
 reply(envelope, ...strings) {
     if (this.mmNoReply) {
