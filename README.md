@@ -6,7 +6,7 @@
 
 **Hubot** is "chat bot" created by GitHub that listens for commands and executes actions based on your requests. 
 
-`hubot-matteruser` is a Hubot adapter for [Mattermost](https://about.mattermost.com/) written in Javascript that uses the Mattermost [Web Services API](https://api.mattermost.com/) and WebSockets to deliver Hubot functionality. 
+`hubot-matteruser` is a Hubot adapter for [Mattermost](https://about.mattermost.com/) written in JavaScript that uses the Mattermost [Web Services API](https://api.mattermost.com/) and WebSockets to deliver Hubot functionality. 
 
 - Learn more about [Hubot in Wired Magazine](https://www.wired.com/2015/10/the-most-important-startups-hardest-worker-isnt-a-person/)
 - Learn more about [Mattermost as an open source, self-hosted team communication server](https://about.mattermost.com/)
@@ -20,7 +20,7 @@ Two authentication methods are supported:
 * login/password,
 * [personnal access token](https://docs.mattermost.com/developer/personal-access-tokens.html).
 
-The second one is necessary if the Mattermost server delegates the authentication to another service (for example when using Mattermost shiped with [Gitlab](http://www.gitlab.com)).
+The second one is necessary if the Mattermost server delegates the authentication to another service (for example when using Mattermost shiped with [GitLab](http://www.gitlab.com)).
 Such method is also probably prefered as the token does not reveals original credentials and can be revoked without any impact on the related account.
 
 ## Docker usage
