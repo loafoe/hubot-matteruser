@@ -1,9 +1,9 @@
 {
   "name": "hubot-matteruser",
-  "version": "5.3.1",
+  "version": "5.4.0",
   "author": {
     "name": "Andy Lo-A-Foe",
-    "url": "https://aemian.com/"
+    "url": "https://github.com/loafoe"
   },
   "contributors": [],
   "description": "Mattermost Adapter",
@@ -20,11 +20,11 @@
   },
   "bugs": {
     "url": "https://github.com/loafoe/hubot-matteruser/issues",
-    "email": "support@aemian.com"
+    "email": "andy.loafoe@gmail.com"
   },
   "main": "./src/matteruser.js",
   "dependencies": {
-    "mattermost-client": "^6.1.1",
+    "mattermost-client": "^6.2.0",
     "parent-require": "^1.0.0",
     "ws": ">=3.3.1",
     "q": "^1.4.1"
