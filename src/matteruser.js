@@ -298,7 +298,7 @@ reply(envelope, ...strings) {
     postData.message = strings[0];
 
     // Set the comment relationship
-    postData.root_id = envelope.user.id || envelope.message.id;
+    postData.root_id = envelope.user.root_id || envelope.message.id;
     postData.parent_id = envelope.message.id;
 
     postData.create_at = 0;
