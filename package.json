@@ -1,6 +1,6 @@
 {
   "name": "hubot-matteruser",
-  "version": "5.4.0",
+  "version": "5.4.1",
   "author": {
     "name": "Andy Lo-A-Foe",
     "url": "https://github.com/loafoe"
@@ -26,8 +26,8 @@
   "dependencies": {
     "mattermost-client": "^6.2.0",
     "parent-require": "^1.0.0",
-    "ws": ">=3.3.1",
-    "q": "^1.4.1"
+    "q": "^1.4.1",
+    "ws": "^7.3.1"
   },
   "peerDependencies": {
     "hubot": ">=3.0.1"
