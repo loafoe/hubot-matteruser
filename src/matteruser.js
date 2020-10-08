@@ -345,7 +345,8 @@ message(msg) {
 
     const user = this.robot.brain.userForId(mmPost.user_id);
     user.room = mmPost.channel_id;
-    user.room_name = msg.data.channel_display_name;
+    user.room_name = msg.data.channel_name;
+    user.room_display_name = msg.data.channel_display_name;
     user.channel_type = msg.data.channel_type;
     user.root_id = mmPost.root_id;
 
