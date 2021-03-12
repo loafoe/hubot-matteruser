@@ -1,15 +1,17 @@
-const { Adapter,
-    TextMessage,
-    EnterMessage,
-    LeaveMessage } = require('hubot/es2015');
+const {
+  Adapter,
+  TextMessage,
+  EnterMessage,
+  LeaveMessage
+} = require('hubot/es2015');
 
 const MatterMostClient = require('mattermost-client');
 
 class AttachmentMessage extends TextMessage {
 
-constructor(user, text, file_ids, id) {
+  constructor(user, text, file_ids, id) {
     super(user, text, id);
-}
+  }
 }
 
 // A TextMessage class that adds `msg.props` for Mattermost's properties.
@@ -29,34 +31,34 @@ constructor(user, text, file_ids, id) {
 //   }
 class TextAndPropsMessage extends TextMessage {
 
-constructor(user, text, props, id) {
+  constructor(user, text, props, id) {
     super(user, text, id);
     this.props = props;
     this.origText = this.text;
     if (this.props.attachments) {
-        const separator = '\n\n--\n\n';
-        for (let attachment of this.props.attachments) {
-            const parts = [];
-            for (let field of ['pretext', 'title', 'text']) {
-                if (attachment[field]) {
-                    parts.push(attachment[field]);
-                }
-            }
-            if (parts.length) {
-                this.text += separator + parts.join('\n\n');
-            }
+      const separator = '\n\n--\n\n';
+      for (let attachment of this.props.attachments) {
+        const parts = [];
+        for (let field of ['pretext', 'title', 'text']) {
+          if (attachment[field]) {
+            parts.push(attachment[field]);
+          }
         }
+        if (parts.length) {
+          this.text += separator + parts.join('\n\n');
+        }
+      }
     }
-}
+  }
 
-match(regex) {
+  match(regex) {
     return this.text.match(regex);
-}
+  }
 }
 
 class Matteruser extends Adapter {
 
-constructor(...args) {
+  constructor(...args) {
     super(...args);
 
     // Binding because async calls galore
@@ -72,9 +74,9 @@ constructor(...args) {
     this.userTyping = this.userTyping.bind(this);
     this.userAdded = this.userAdded.bind(this);
     this.userRemoved = this.userRemoved.bind(this);
-}
+  }
 
-run() {
+  run() {
     const mmHost = process.env.MATTERMOST_HOST;
     const mmUser = process.env.MATTERMOST_USER || null;
     const mmPassword = process.env.MATTERMOST_PASSWORD;
@@ -88,20 +90,20 @@ run() {
     this.mmIgnoreUsers = (process.env.MATTERMOST_IGNORE_USERS != null ? process.env.MATTERMOST_IGNORE_USERS.split(',') : undefined) || [];
 
     if (mmHost == null) {
-        this.robot.logger.emergency("MATTERMOST_HOST is required");
-        process.exit(1);
+      this.robot.logger.emergency("MATTERMOST_HOST is required");
+      process.exit(1);
     }
     if (mmUser == null && mmAccessToken == null) {
-        this.robot.logger.emergency("MATTERMOST_USER or MATTERMOST_ACCESS_TOKEN is required");
-        process.exit(1);
+      this.robot.logger.emergency("MATTERMOST_USER or MATTERMOST_ACCESS_TOKEN is required");
+      process.exit(1);
     }
     if (mmPassword == null && mmAccessToken == null) {
-        this.robot.logger.emergency("MATTERMOST_PASSWORD is required");
-        process.exit(1);
+      this.robot.logger.emergency("MATTERMOST_PASSWORD is required");
+      process.exit(1);
     }
     if (mmGroup == null) {
-        this.robot.logger.emergency("MATTERMOST_GROUP is required");
-        process.exit(1);
+      this.robot.logger.emergency("MATTERMOST_GROUP is required");
+      process.exit(1);
     }
 
     this.client = new MatterMostClient(mmHost, mmGroup, {wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000, httpProxy: mmHTTPProxy});
@@ -123,173 +125,181 @@ run() {
       return this.client.tokenLogin(mmAccessToken);
     }
     return this.client.login(mmUser, mmPassword, mmMFAToken);
-}
+  }
 
-open() {
+  open() {
     return true;
-}
+  }
 
-error(err) {
+  error(err) {
     this.robot.logger.info(`Error: ${err}`);
     return true;
-}
+  }
 
-onConnected() {
+  onConnected() {
     this.robot.logger.info('Connected to Mattermost.');
     this.emit('connected');
     return true;
-}
+  }
 
-onHello(event) {
+  onHello(event) {
     this.robot.logger.info(`Mattermost server: ${event.data.server_version}`);
     return true;
-}
+  }
 
-userChange(user) {
-    if (!user || (user.id == null)) { return; }
+  userChange(user) {
+    if (!user || (user.id == null)) {
+      return;
+    }
     this.robot.logger.debug(`Adding user ${user.id}`);
     const newUser = {
-        name: user.username,
-        real_name: `${user.first_name} ${user.last_name}`,
-        email_address: user.email,
-        mm: {}
+      name: user.username,
+      real_name: `${user.first_name} ${user.last_name}`,
+      email_address: user.email,
+      mm: {}
     };
 
     // Preserve the DM channel ID if it exists
     let user_obj = this.robot.brain.userForId(user.id);
     newUser.mm.dm_channel_id = undefined;
-    if ("mm" in user_obj) { newUser.mm.dm_channel_id = user_obj.mm.dm_channel_id }
+    if ("mm" in user_obj) {
+      newUser.mm.dm_channel_id = user_obj.mm.dm_channel_id
+    }
 
     let value;
     for (var key in user) {
-        value = user[key];
-        newUser.mm[key] = value;
+      value = user[key];
+      newUser.mm[key] = value;
     }
     if (user.id in this.robot.brain.data.users) {
-        for (key in this.robot.brain.data.users[user.id]) {
-            value = this.robot.brain.data.users[user.id][key];
-            if (!(key in newUser)) {
-                newUser[key] = value;
-            }
+      for (key in this.robot.brain.data.users[user.id]) {
+        value = this.robot.brain.data.users[user.id][key];
+        if (!(key in newUser)) {
+          newUser[key] = value;
         }
+      }
     }
     delete this.robot.brain.data.users[user.id];
     return this.robot.brain.userForId(user.id, newUser);
-}
+  }
 
-loggedIn(user) {
+  loggedIn(user) {
     this.robot.logger.info(`Logged in as user "${user.username}" but not connected yet.`);
     this.self = user;
     return true;
-}
+  }
 
-profilesLoaded(profiles) {
+  profilesLoaded(profiles) {
     return (() => {
-        const result = [];
-        for (let id in profiles) {
-            const user = profiles[id];
-            result.push(this.userChange(user));
-        }
-        return result;
+      const result = [];
+      for (let id in profiles) {
+        const user = profiles[id];
+        result.push(this.userChange(user));
+      }
+      return result;
     })();
-}
+  }
 
-brainLoaded() {
+  brainLoaded() {
     this.robot.logger.info('Brain loaded');
     for (let id in this.client.users) {
-        const user = this.client.users[id];
-        this.userChange(user);
+      const user = this.client.users[id];
+      this.userChange(user);
     }
     return true;
-}
+  }
 
-send(envelope, ...strings) {
+  send(envelope, ...strings) {
     // Check if the target room is also a user's username
     let str;
     const user = this.robot.brain.userForName(envelope.room);
 
     // If it's not, continue as normal
     if (!user) {
-        const channel = this.client.findChannelByName(envelope.room);
-        const channel_id = channel ? channel.id : undefined;
+      const channel = this.client.findChannelByName(envelope.room);
+      const channel_id = channel ? channel.id : undefined;
 
-        for (str of strings) {
-            this.client.postMessage(str,
-                                    (channel_id || envelope.room));
-        }
+      for (str of strings) {
+        this.client.postMessage(str,
+          (channel_id || envelope.room));
+      }
     } else {
-        // If it is, we assume they want to DM that user
-        // Message their DM channel ID if it already exists.
-        let dm_channel_id = user.mm
-                            ? (user.mm.dm_channel_id ? user.mm.dm_channel_id : undefined)
-                            : undefined
+      // If it is, we assume they want to DM that user
+      // Message their DM channel ID if it already exists.
+      let dm_channel_id = user.mm
+        ? (user.mm.dm_channel_id ? user.mm.dm_channel_id : undefined)
+        : undefined
 
-        if (dm_channel_id != null) {
-            for (str of strings) {
-                this.client.postMessage(str, user.mm.dm_channel_id);
-            }
-
-        } else {
-
-            let self = this
-
-            // Otherwise, create a new DM channel ID and message it.
-            this.client.getUserDirectMessageChannel(user.id, channel => {
-                if (!user.mm) { user.mm = {}; }
-                user.mm.dm_channel_id = channel.id;
-
-                for (str of strings) {
-                    self.client.postMessage(str, channel.id);
-                }
-            });
+      if (dm_channel_id != null) {
+        for (str of strings) {
+          this.client.postMessage(str, user.mm.dm_channel_id);
         }
+
+      } else {
+
+        let self = this
+
+        // Otherwise, create a new DM channel ID and message it.
+        this.client.getUserDirectMessageChannel(user.id, channel => {
+          if (!user.mm) {
+            user.mm = {};
+          }
+          user.mm.dm_channel_id = channel.id;
+
+          for (str of strings) {
+            self.client.postMessage(str, channel.id);
+          }
+        });
+      }
     }
-}
-  
-cmd(envelope, ...strings) {
+  }
+
+  cmd(envelope, ...strings) {
     // Check if the target room is also a user's username
     let str;
     const user = this.robot.brain.userForName(envelope.room);
 
     // If it's not, continue as normal
     if (!user) {
-        const channel = this.client.findChannelByName(envelope.room);
-        const channel_id = channel ? channel.id : undefined;
+      const channel = this.client.findChannelByName(envelope.room);
+      const channel_id = channel ? channel.id : undefined;
 
-        for (str of strings) {
-            this.client.postCommand((channel_id || envelope.room),
-                                    str);
-        }
+      for (str of strings) {
+        this.client.postCommand((channel_id || envelope.room),
+          str);
+      }
     } else {
-        // If it is, we assume they want to DM that user
-        // Message their DM channel ID if it already exists.
-        let dm_channel_id = user.mm
-                            ? (user.mm.dm_channel_id ? user.mm.dm_channel_id : undefined)
-                            : undefined
+      // If it is, we assume they want to DM that user
+      // Message their DM channel ID if it already exists.
+      let dm_channel_id = user.mm
+        ? (user.mm.dm_channel_id ? user.mm.dm_channel_id : undefined)
+        : undefined
 
-        if (dm_channel_id != null) {
-            for (str of strings) {
-                this.client.postCommand(user.mm.dm_channel_id, str);
-            }
-
-        } else {
-
-            let self = this
-
-            // Otherwise, create a new DM channel ID and message it.
-            this.client.getUserDirectMessageChannel(user.id, channel => {
-                if (!user.mm) { user.mm = {}; }
-                user.mm.dm_channel_id = channel.id;
-
-                for (str of strings) {
-                    self.client.postCommand(channel.id,str);
-                }
-            });
+      if (dm_channel_id != null) {
+        for (str of strings) {
+          this.client.postCommand(user.mm.dm_channel_id, str);
         }
-    }
-}
 
-reply(envelope, ...strings) {
+      } else {
+
+        let self = this
+
+        // Otherwise, create a new DM channel ID and message it.
+        this.client.getUserDirectMessageChannel(user.id, channel => {
+          if (!user.mm) {
+            user.mm = {};
+          }
+          user.mm.dm_channel_id = channel.id;
+
+          for (str of strings) {
+            self.client.postCommand(channel.id, str);
+          }
+        });
+      }
+    }
+  }
+
+  reply(envelope, ...strings) {
     if (this.mmNoReply) {
       return this.send(envelope, ...strings);
     }
@@ -309,38 +319,42 @@ reply(envelope, ...strings) {
 
     // If it's not, continue as normal
     if (!user) {
-        const channel = this.client.findChannelByName(envelope.room);
-        postData.channel_id = (channel ? channel.id : undefined) || envelope.room;
-        this.client.customMessage(postData, postData.channel_id);
-        return;
+      const channel = this.client.findChannelByName(envelope.room);
+      postData.channel_id = (channel ? channel.id : undefined) || envelope.room;
+      this.client.customMessage(postData, postData.channel_id);
+      return;
     }
 
     // If it is, we assume they want to DM that user
     // Message their DM channel ID if it already exists.
     if ((user.mm ? user.mm.dm_channel_id : undefined) != null) {
-        postData.channel_id = user.mm.dm_channel_id;
-        this.client.customMessage(postData, postData.channel_id);
-        return;
+      postData.channel_id = user.mm.dm_channel_id;
+      this.client.customMessage(postData, postData.channel_id);
+      return;
     }
 
     // Otherwise, create a new DM channel ID and message it.
     return this.client.getUserDirectMessageChannel(user.id, channel => {
-        if (!user.mm) { user.mm = {}; }
-        user.mm.dm_channel_id = channel.id;
-        postData.channel_id = channel.id;
-        return this.client.customMessage(postData, postData.channel_id);
+      if (!user.mm) {
+        user.mm = {};
+      }
+      user.mm.dm_channel_id = channel.id;
+      postData.channel_id = channel.id;
+      return this.client.customMessage(postData, postData.channel_id);
     });
-}
+  }
 
-message(msg) {
+  message(msg) {
     if (this.mmIgnoreUsers.includes(msg.data.sender_name)) {
       this.robot.logger.info(`User ${msg.data.sender_name} is in MATTERMOST_IGNORE_USERS, ignoring them.`);
       return;
-  }
+    }
 
     this.robot.logger.debug(msg);
     const mmPost = JSON.parse(msg.data.post);
-    if (mmPost.user_id === this.self.id) { return; } // Ignore our own output
+    if (mmPost.user_id === this.self.id) {
+      return;
+    } // Ignore our own output
     this.robot.logger.debug(`From: ${mmPost.user_id}, To: ${this.self.id}`);
 
     const user = this.robot.brain.userForId(mmPost.user_id);
@@ -352,36 +366,38 @@ message(msg) {
 
     let text = mmPost.message;
     if (msg.data.channel_type === 'D') {
-        if (!new RegExp(`^@?${this.robot.name}`, 'i').test(text)) { // Direct message
-          text = `${this.robot.name} ${text}`;
-        }
-        if (!user.mm) { user.mm = {}; }
-        user.mm.dm_channel_id = mmPost.channel_id;
+      if (!new RegExp(`^@?${this.robot.name}`, 'i').test(text)) { // Direct message
+        text = `${this.robot.name} ${text}`;
+      }
+      if (!user.mm) {
+        user.mm = {};
+      }
+      user.mm.dm_channel_id = mmPost.channel_id;
     }
     this.robot.logger.debug(`Text: ${text}`);
 
     if (mmPost.file_ids) {
-        this.receive(new AttachmentMessage(user, text, mmPost.file_ids, mmPost.id));
-    // If there are interesting props, then include them for bot handlers.
-    } else if ( mmPost.props ? mmPost.props.attachments : undefined ) {
-        this.receive(new TextAndPropsMessage(user, text, mmPost.props, mmPost.id));
+      this.receive(new AttachmentMessage(user, text, mmPost.file_ids, mmPost.id));
+      // If there are interesting props, then include them for bot handlers.
+    } else if (mmPost.props ? mmPost.props.attachments : undefined) {
+      this.receive(new TextAndPropsMessage(user, text, mmPost.props, mmPost.id));
     } else {
-        this.receive(new TextMessage(user, text, mmPost.id));
+      this.receive(new TextMessage(user, text, mmPost.id));
     }
     this.robot.logger.debug("Message sent to hubot brain.");
     return true;
-}
+  }
 
-userTyping(msg) {
+  userTyping(msg) {
     this.robot.logger.info('Someone is typing...', msg);
     return true;
-}
+  }
 
-userAdded(msg) {
+  userAdded(msg) {
     // update channels when this bot is added to a new channel
     if (msg.data.user_id === this.self.id) {
       this.client.loadChannels();
-  }
+    }
     try {
       const mmUser = this.client.getUserByID(msg.data.user_id);
       this.userChange(mmUser);
@@ -391,14 +407,14 @@ userAdded(msg) {
       return true;
     } catch (error) {
       return false;
+    }
   }
-}
 
-userRemoved(msg) {
+  userRemoved(msg) {
     // update channels when this bot is removed from a channel
     if (msg.broadcast.user_id === this.self.id) {
       this.client.loadChannels();
-  }
+    }
     try {
       const mmUser = this.client.getUserByID(msg.data.user_id);
       const user = this.robot.brain.userForId(mmUser.id);
@@ -407,18 +423,22 @@ userRemoved(msg) {
       return true;
     } catch (error) {
       return false;
+    }
   }
-}
 
-changeHeader(channel, header) {
-    if (channel == null || header == null) { return; }
+  changeHeader(channel, header) {
+    if (channel == null || header == null) {
+      return;
+    }
 
     const channelInfo = this.client.findChannelByName(channel);
 
-    if (channelInfo == null) { return this.robot.logger.error("Channel not found"); }
+    if (channelInfo == null) {
+      return this.robot.logger.error("Channel not found");
+    }
 
     return this.client.setChannelHeader(channelInfo.id, header);
-}
+  }
 }
 
 module.exports.use = robot => new Matteruser(robot)

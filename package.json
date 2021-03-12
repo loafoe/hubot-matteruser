@@ -23,6 +23,12 @@
     "email": "andy.loafoe@gmail.com"
   },
   "main": "./src/matteruser.js",
+  "scripts": {
+    "lint": "yarn lint:js",
+    "lint:fix": "yarn lint:js:fix",
+    "lint:js": "node_modules/.bin/eslint 'src/**/*.js'",
+    "lint:js:fix": "yarn lint:js --fix",
+  },
   "dependencies": {
     "mattermost-client": "^6.2.0",
     "parent-require": "^1.0.0",
@@ -31,5 +37,9 @@
   },
   "peerDependencies": {
     "hubot": ">=3.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.21.0",
+    "eslint-config-airbnb-base": "^14.2.1"
   }
 }

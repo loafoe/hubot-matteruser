@@ -1,0 +1,16 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+
+  eslint:
+    name: Check ESLint
+    runs-on: ubuntu-latest
+    container: node:current
+    steps:
+      - uses: actions/checkout@v1
+      - name: install dependencies
+        run: npm ci
+      - name: check lint
+        run: npm run lint
