@@ -27,7 +27,7 @@
     "lint": "yarn lint:js",
     "lint:fix": "yarn lint:js:fix",
     "lint:js": "node_modules/.bin/eslint 'src/**/*.js'",
-    "lint:js:fix": "yarn lint:js --fix",
+    "lint:js:fix": "yarn lint:js --fix"
   },
   "dependencies": {
     "mattermost-client": "^6.2.0",
