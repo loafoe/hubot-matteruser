@@ -30,7 +30,7 @@
     "lint:js:fix": "yarn lint:js --fix"
   },
   "dependencies": {
-    "mattermost-client": "^6.3.0",
+    "mattermost-client": "^6.4.0",
     "parent-require": "^1.0.0",
     "q": "^1.4.1",
     "ws": "^7.3.1"
