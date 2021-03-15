@@ -1,6 +1,6 @@
 {
   "name": "hubot-matteruser",
-  "version": "5.4.1",
+  "version": "5.4.2",
   "author": {
     "name": "Andy Lo-A-Foe",
     "url": "https://github.com/loafoe"
@@ -30,7 +30,7 @@
     "lint:js:fix": "yarn lint:js --fix"
   },
   "dependencies": {
-    "mattermost-client": "^6.2.0",
+    "mattermost-client": "^6.3.0",
     "parent-require": "^1.0.0",
     "q": "^1.4.1",
     "ws": "^7.3.1"
