@@ -7,6 +7,16 @@ const {
 
 const MatterMostClient = require('mattermost-client');
 
+/**
+ * @typedef {Object} User
+ * @property {string} id
+ * @property {string} username
+ * @property {string} room
+ * @property {string} [last_name]
+ * @property {string} [first_name]
+ * @property {string} [mail] - Instant of close at ISO instant format
+ */
+
 class AttachmentMessage extends TextMessage {
 
   constructor(user, text, file_ids, id) {
@@ -106,7 +116,12 @@ class Matteruser extends Adapter {
       process.exit(1);
     }
 
-    this.client = new MatterMostClient(mmHost, mmGroup, {wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000, httpProxy: mmHTTPProxy});
+    this.client = new MatterMostClient(mmHost, mmGroup, {
+      wssPort: mmWSSPort,
+      httpPort: mmHTTPPort,
+      pingInterval: 30000,
+      httpProxy: mmHTTPProxy
+    });
 
     this.client.on('open', this.open);
     this.client.on('hello', this.onHello);
@@ -147,6 +162,11 @@ class Matteruser extends Adapter {
     return true;
   }
 
+  /**
+   *
+   * @param user {User} The user to be change
+   * @returns {User} The updated User
+   */
   userChange(user) {
     if (!user || (user.id == null)) {
       return;
@@ -183,12 +203,22 @@ class Matteruser extends Adapter {
     return this.robot.brain.userForId(user.id, newUser);
   }
 
+  /**
+   *
+   * @param user {User} The user to logged in
+   * @returns {boolean} True if the user is now logged in
+   */
   loggedIn(user) {
     this.robot.logger.info(`Logged in as user "${user.username}" but not connected yet.`);
     this.self = user;
     return true;
   }
 
+  /**
+   *
+   * @param profiles {User[]} The users profile loaded
+   * @returns {[]}
+   */
   profilesLoaded(profiles) {
     return (() => {
       const result = [];
