@@ -97,7 +97,9 @@ class Matteruser extends Adapter {
     const mmAccessToken = process.env.MATTERMOST_ACCESS_TOKEN || null;
     const mmHTTPProxy = process.env.http_proxy || null;
     this.mmNoReply = process.env.MATTERMOST_REPLY === 'false';
-    this.mmIgnoreUsers = (process.env.MATTERMOST_IGNORE_USERS != null ? process.env.MATTERMOST_IGNORE_USERS.split(',') : undefined) || [];
+    this.mmIgnoreUsers = (process.env.MATTERMOST_IGNORE_USERS != null
+      ? process.env.MATTERMOST_IGNORE_USERS.split(',')
+      : undefined) || [];
 
     if (mmHost == null) {
       this.robot.logger.emergency("MATTERMOST_HOST is required");
@@ -117,12 +119,18 @@ class Matteruser extends Adapter {
     }
 
     this.client = new MatterMostClient(mmHost, mmGroup, {
-      wssPort: mmWSSPort,
-      httpPort: mmHTTPPort,
-      pingInterval: 30000,
-      httpProxy: mmHTTPProxy
+      wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000, httpProxy: mmHTTPProxy
     });
 
+    this.declareCallbacks();
+
+    if (mmAccessToken != null) {
+      return this.client.tokenLogin(mmAccessToken);
+    }
+    return this.client.login(mmUser, mmPassword, mmMFAToken);
+  }
+
+  declareCallbacks() {
     this.client.on('open', this.open);
     this.client.on('hello', this.onHello);
     this.client.on('loggedIn', this.loggedIn);
@@ -135,11 +143,6 @@ class Matteruser extends Adapter {
     this.client.on('error', this.error);
 
     this.robot.brain.on('loaded', this.brainLoaded);
-
-    if (mmAccessToken != null) {
-      return this.client.tokenLogin(mmAccessToken);
-    }
-    return this.client.login(mmUser, mmPassword, mmMFAToken);
   }
 
   open() {
@@ -164,7 +167,7 @@ class Matteruser extends Adapter {
 
   /**
    *
-   * @param user {User} The user to be change
+   * @param {User} user The user to be change
    * @returns {User} The updated User
    */
   userChange(user) {
@@ -205,7 +208,7 @@ class Matteruser extends Adapter {
 
   /**
    *
-   * @param user {User} The user to logged in
+   * @param {User} user The user to logged in
    * @returns {boolean} True if the user is now logged in
    */
   loggedIn(user) {
@@ -216,8 +219,8 @@ class Matteruser extends Adapter {
 
   /**
    *
-   * @param profiles {User[]} The users profile loaded
-   * @returns {[]}
+   * @param {User[]} profiles The users profile loaded
+   * @returns {[]} The changed users
    */
   profilesLoaded(profiles) {
     return (() => {
