@@ -1,27 +1,23 @@
 const {use} = require('../src/matteruser.js');
+const MatterMostClient = require('mattermost-client');
+jest.mock('mattermost-client');
 
-const robot = jest.fn();
+const robot = require('robot');
 const tested = use(robot);
 
 beforeEach(() => {
+  jest.resetAllMocks();
   jest.resetModules() // Most important - it clears the cache
+  tested.client = jest.fn();
   tested.emit = jest.fn();
-  robot.send = jest.fn();
-  robot.on = jest.fn();
-  robot.brain = jest.fn();
-  robot.brain.on = jest.fn();
-  robot.http = jest.fn();
-  // robot.http = jest.fn().mockImplementation(() => ScopedClient.create());
-  robot.logger = jest.fn();
-  robot.logger.info = jest.fn();
-  robot.logger.debug = jest.fn();
-  robot.logger.error = jest.fn();
-  robot.logger.emergency = jest.fn();
 });
 
 describe('Matteruser', () => {
+  const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {
+  });
+  let OLD_ENV = {}
   beforeEach(() => {
-    const OLD_ENV = process.env;
+    OLD_ENV = process.env;
     process.env = {...OLD_ENV}; // Make a copy
     process.env.MATTERMOST_HOST = '';
     process.env.MATTERMOST_USER = 'obiwan';
@@ -29,19 +25,47 @@ describe('Matteruser', () => {
     process.env.MATTERMOST_MFA_TOKEN = '';
     process.env.MATTERMOST_GROUP = '';
   });
-  afterAll(() => {
+  afterEach(() => {
     process.env = OLD_ENV; // Restore old environment
   });
 
   test('should create Matteruser', () => {
     const actual = use(robot);
     expect(actual).toBeDefined();
+    expect(mockExit).not.toHaveBeenCalled();
   });
 
-  test('should I run Matteruser', () => {
+  test('should I login Matteruser', () => {
     use(robot).run();
     expect(robot.brain.on).toBeCalledWith('loaded', expect.anything());
+    expect(mockExit).not.toHaveBeenCalled();
+    expect(MatterMostClient).toHaveBeenCalled();
+    expect(MatterMostClient.prototype.login).toHaveBeenCalled();
   });
+
+  test('should I login Matteruser with token', () => {
+    process.env.MATTERMOST_ACCESS_TOKEN = 'token';
+    use(robot).run();
+    expect(robot.brain.on).toBeCalledWith('loaded', expect.anything());
+    expect(mockExit).not.toHaveBeenCalled();
+    expect(MatterMostClient).toHaveBeenCalled();
+    expect(MatterMostClient.prototype.tokenLogin).toHaveBeenCalled();
+  });
+
+  test.each([
+    ['MATTERMOST_HOST'],
+    ['MATTERMOST_USER'],
+    ['MATTERMOST_PASSWORD'],
+    ['MATTERMOST_GROUP'],
+  ])('should fail run Matteruser without %s', (envvar) => {
+    delete process.env[envvar];
+
+    use(robot).run();
+    expect(mockExit).toHaveBeenCalledWith(1);
+    expect(robot.logger.emergency)
+      .toHaveBeenNthCalledWith(1, expect.stringContaining(envvar))
+  });
+
 });
 
 describe('Matteruser Callbacks', () => {
@@ -114,7 +138,7 @@ describe('Matteruser misc', () => {
   });
 
   test('should failed to change channel header', () => {
-    const actual = tested.changeHeader( 'May the force be with you');
+    tested.changeHeader('May the force be with you');
     expect(tested.client.findChannelByName).not.toBeCalled();
     expect(tested.client.setChannelHeader).not.toBeCalledWith(42, 'May the force be with you');
   });

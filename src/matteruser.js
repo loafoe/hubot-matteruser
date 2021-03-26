@@ -7,16 +7,6 @@ const {
 
 const MatterMostClient = require('mattermost-client');
 
-/**
- * @typedef {Object} User
- * @property {string} id
- * @property {string} username
- * @property {string} room
- * @property {string} [last_name]
- * @property {string} [first_name]
- * @property {string} [mail] - Instant of close at ISO instant format
- */
-
 class AttachmentMessage extends TextMessage {
 
   constructor(user, text, file_ids, id) {
@@ -123,10 +113,10 @@ class Matteruser extends Adapter {
     });
 
     this.declareCallbacks();
-
     if (mmAccessToken != null) {
       return this.client.tokenLogin(mmAccessToken);
     }
+
     return this.client.login(mmUser, mmPassword, mmMFAToken);
   }
 
