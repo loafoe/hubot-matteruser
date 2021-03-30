@@ -7,3 +7,7 @@
  * @property {string} [first_name]
  * @property {string} [email] - The mail of the user
  */
+/**
+ * @typedef {Object} Envelop
+ * @property {string} room
+ */

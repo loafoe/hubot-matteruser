@@ -1,3 +1,5 @@
+const {matterUserAfterEnv, matterUserBeforeEnv} = require("./helpers/test-helpers");
+
 const {use} = require('../src/matteruser.js');
 const MatterMostClient = require('mattermost-client');
 jest.mock('mattermost-client');
@@ -15,19 +17,8 @@ beforeEach(() => {
 describe('Matteruser', () => {
   const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {
   });
-  let OLD_ENV = {}
-  beforeEach(() => {
-    OLD_ENV = process.env;
-    process.env = {...OLD_ENV}; // Make a copy
-    process.env.MATTERMOST_HOST = '';
-    process.env.MATTERMOST_USER = 'obiwan';
-    process.env.MATTERMOST_PASSWORD = '';
-    process.env.MATTERMOST_MFA_TOKEN = '';
-    process.env.MATTERMOST_GROUP = '';
-  });
-  afterEach(() => {
-    process.env = OLD_ENV; // Restore old environment
-  });
+  beforeEach(matterUserBeforeEnv);
+  afterEach(matterUserAfterEnv);
 
   test('should create Matteruser', () => {
     const actual = use(robot);

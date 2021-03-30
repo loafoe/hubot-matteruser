@@ -9,14 +9,29 @@ robot.brain.data.users = {
   'okenobi': {
     mm: {
       dm_channel_id: '66'
-    }
-  }
+    },
+    faction: 'jedi',
+  },
+  'lskywalker': {
+    faction: 'jedi',
+  },
 };
 robot.brain.userForId = (userId, newUser) => {
   if (newUser !== undefined) {
     robot.brain.data.users[userId] = newUser;
   }
   return robot.brain.data.users[userId];
+};
+robot.brain.userForName = (userName) => {
+  if (userName === undefined) {
+    return null;
+  } else if (userName === 'okenobi') {
+    return robot.brain.data.users[userName];
+  } else if (userName === 'lskywalker') {
+    return robot.brain.data.users[userName];
+  }else {
+    return null;
+  }
 };
 
 robot.http = jest.fn();

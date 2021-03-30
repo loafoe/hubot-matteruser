@@ -232,6 +232,12 @@ class Matteruser extends Adapter {
     return true;
   }
 
+  /**
+   *
+   * @param {Envelop} envelope containing the room to send strings
+   * @param {string} strings  The messages to send
+   * @return {undefined}
+   */
   send(envelope, ...strings) {
     // Check if the target room is also a user's username
     let str;

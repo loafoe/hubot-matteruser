@@ -25,6 +25,7 @@ describe('MatterUser userChenge', () => {
       name: 'okenobi',
       real_name: 'Obiwan Kenobi',
       email_address: 'obiwan.kenobi@matteruser.com',
+      faction: 'jedi',
       mm: {
         dm_channel_id: '66',
         id: 'okenobi',
@@ -34,5 +35,16 @@ describe('MatterUser userChenge', () => {
         email: 'obiwan.kenobi@matteruser.com'
       }
     });
+  });
+
+  test('should change user without user', () => {
+    const actual = tested.userChange({
+      username: 'okenobi',
+      first_name: 'Obiwan',
+      last_name: 'Kenobi',
+      email: 'obiwan.kenobi@matteruser.com',
+    });
+
+    expect(actual).toBeFalsy();
   });
 });
