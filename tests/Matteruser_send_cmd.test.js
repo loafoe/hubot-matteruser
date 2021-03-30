@@ -54,3 +54,40 @@ describe('MatterUser send', () => {
     expect(tested.client.postMessage).toHaveBeenNthCalledWith(3, "with you", "lskywalker");
   });
 });
+
+describe('MatterUser command', () => {
+  test('should command to mattermost user', () => {
+    tested.cmd({room: 'tatooine'}, 'May the', '4th Be', 'with you');
+
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(1, "tatooine", "May the");
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(2, "tatooine", "4th Be");
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(3, "tatooine", "with you");
+  });
+
+  test('should command to mattermost channel with channel id', () => {
+    tested.client.findChannelByName.mockImplementation(room => ({id: 'tatooine_id'}));
+    tested.cmd({room: 'tatooine'}, 'May the', '4th Be', 'with you');
+
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(1, "tatooine_id", "May the");
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(2, "tatooine_id", "4th Be");
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(3, "tatooine_id", "with you");
+  });
+
+  test('should command to mattermost user', () => {
+    tested.cmd({room: 'okenobi'}, 'May the', '4th Be', 'with you');
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(1, "66", "May the");
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(2, "66", "4th Be");
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(3, "66", "with you");
+  });
+
+  test('should command to mattermost user', () => {
+    tested.client.getUserDirectMessageChannel.mockImplementation((user_id, callback) => {
+      callback({id: 'lskywalker'});
+    });
+
+    tested.cmd({room: 'lskywalker'}, 'May the', '4th Be', 'with you');
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(1, "lskywalker", "May the");
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(2, "lskywalker", "4th Be");
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(3, "lskywalker", "with you");
+  });
+});
