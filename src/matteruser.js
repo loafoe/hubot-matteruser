@@ -366,9 +366,6 @@ class Matteruser extends Adapter {
 
     let text = mmPost.message;
     if (msg.data.channel_type === 'D') {
-      if (!new RegExp(`^@?${this.robot.name}`, 'i').test(text)) { // Direct message
-        text = `${this.robot.name} ${text}`;
-      }
       if (!user.mm) {
         user.mm = {};
       }
