@@ -29,7 +29,7 @@ robot.brain.userForName = (userName) => {
     return robot.brain.data.users[userName];
   } else if (userName === 'lskywalker') {
     return robot.brain.data.users[userName];
-  }else {
+  } else {
     return null;
   }
 };

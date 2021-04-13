@@ -3,9 +3,7 @@ const {matterUserAfterEnv, matterUserBeforeEnv} = require("./helpers/test-helper
 const {use} = require('../src/matteruser.js');
 jest.mock('mattermost-client');
 
-const robot = require('robot');
-const tested = use(robot);
-
+let robot, tested;
 
 beforeAll(matterUserBeforeEnv);
 afterAll(matterUserAfterEnv);
@@ -14,6 +12,8 @@ beforeEach(() => {
   jest.resetAllMocks();
   jest.resetModules() // Most important - it clears the cache
 
+  robot = require('robot');
+  tested = use(robot);
   tested.run();
   tested.emit = jest.fn();
 });
@@ -86,6 +86,8 @@ describe('MatterUser command', () => {
     });
 
     tested.cmd({room: 'lskywalker'}, 'May the', '4th Be', 'with you');
+    expect(tested.client.getUserDirectMessageChannel).toHaveBeenCalled();
+
     expect(tested.client.postCommand).toHaveBeenNthCalledWith(1, "lskywalker", "May the");
     expect(tested.client.postCommand).toHaveBeenNthCalledWith(2, "lskywalker", "4th Be");
     expect(tested.client.postCommand).toHaveBeenNthCalledWith(3, "lskywalker", "with you");
