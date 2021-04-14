@@ -283,6 +283,12 @@ class Matteruser extends Adapter {
     }
   }
 
+  /**
+   *
+   * @param {Envelop} envelope The Message envelop
+   * @param {string} strings The message lines to reply
+   * @returns {void}
+   */
   cmd(envelope, ...strings) {
     // Check if the target room is also a user's username
     let str;
@@ -328,6 +334,12 @@ class Matteruser extends Adapter {
     }
   }
 
+  /**
+   * Reply to a message
+   * @param {Envelop} envelope The Message envelop
+   * @param {string} strings The message lines to reply
+   * @returns {void}
+   */
   reply(envelope, ...strings) {
     if (this.mmNoReply) {
       return this.send(envelope, ...strings);
