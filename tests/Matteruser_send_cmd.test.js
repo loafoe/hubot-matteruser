@@ -45,13 +45,13 @@ describe('MatterUser send', () => {
 
   test('should send envelop to mattermost user', () => {
     tested.client.getUserDirectMessageChannel.mockImplementation((user_id, callback) => {
-      callback({id: 'lskywalker'});
+      callback({id: 'bfett'});
     });
 
-    tested.send({room: 'lskywalker'}, 'May the', '4th Be', 'with you');
-    expect(tested.client.postMessage).toHaveBeenNthCalledWith(1, "May the", "lskywalker");
-    expect(tested.client.postMessage).toHaveBeenNthCalledWith(2, "4th Be", "lskywalker");
-    expect(tested.client.postMessage).toHaveBeenNthCalledWith(3, "with you", "lskywalker");
+    tested.send({room: 'bfett'}, 'May the', '4th Be', 'with you');
+    expect(tested.client.postMessage).toHaveBeenNthCalledWith(1, "May the", "bfett");
+    expect(tested.client.postMessage).toHaveBeenNthCalledWith(2, "4th Be", "bfett");
+    expect(tested.client.postMessage).toHaveBeenNthCalledWith(3, "with you", "bfett");
   });
 });
 
@@ -82,14 +82,14 @@ describe('MatterUser command', () => {
 
   test('should command to mattermost user', () => {
     tested.client.getUserDirectMessageChannel.mockImplementation((user_id, callback) => {
-      callback({id: 'lskywalker'});
+      callback({id: 'bfett'});
     });
 
-    tested.cmd({room: 'lskywalker'}, 'May the', '4th Be', 'with you');
+    tested.cmd({room: 'bfett'}, 'May the', '4th Be', 'with you');
     expect(tested.client.getUserDirectMessageChannel).toHaveBeenCalled();
 
-    expect(tested.client.postCommand).toHaveBeenNthCalledWith(1, "lskywalker", "May the");
-    expect(tested.client.postCommand).toHaveBeenNthCalledWith(2, "lskywalker", "4th Be");
-    expect(tested.client.postCommand).toHaveBeenNthCalledWith(3, "lskywalker", "with you");
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(1, "bfett", "May the");
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(2, "bfett", "4th Be");
+    expect(tested.client.postCommand).toHaveBeenNthCalledWith(3, "bfett", "with you");
   });
 });

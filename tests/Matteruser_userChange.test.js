@@ -22,10 +22,13 @@ describe('MatterUser userChenge', () => {
     });
 
     expect(actual).toEqual({
+      id: 'okenobi',
       name: 'okenobi',
       real_name: 'Obiwan Kenobi',
       email_address: 'obiwan.kenobi@matteruser.com',
       faction: 'jedi',
+      room: 'okenobi',
+      username: 'Obiwan Kenobi',
       mm: {
         dm_channel_id: '66',
         id: 'okenobi',

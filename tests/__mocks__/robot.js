@@ -1,3 +1,5 @@
+const {USER_WITH_CHANNEL, USER_WITHOUT_CHANNEL} = require("../helpers/samples");
+
 const robot = jest.fn();
 robot.send = jest.fn();
 robot.on = jest.fn();
@@ -6,15 +8,8 @@ robot.brain = jest.fn();
 robot.brain.on = jest.fn();
 robot.brain.data = {};
 robot.brain.data.users = {
-  'okenobi': {
-    mm: {
-      dm_channel_id: '66'
-    },
-    faction: 'jedi',
-  },
-  'lskywalker': {
-    faction: 'jedi',
-  },
+  'okenobi': USER_WITH_CHANNEL,
+  'bfett': USER_WITHOUT_CHANNEL,
 };
 robot.brain.userForId = (userId, newUser) => {
   if (newUser !== undefined) {
@@ -27,7 +22,7 @@ robot.brain.userForName = (userName) => {
     return null;
   } else if (userName === 'okenobi') {
     return robot.brain.data.users[userName];
-  } else if (userName === 'lskywalker') {
+  } else if (userName === 'bfett') {
     return robot.brain.data.users[userName];
   } else {
     return null;
