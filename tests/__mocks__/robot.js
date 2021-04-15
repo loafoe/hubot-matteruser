@@ -2,6 +2,7 @@ const {USER_WITH_CHANNEL, USER_WITHOUT_CHANNEL} = require("../helpers/samples");
 
 const robot = jest.fn();
 robot.send = jest.fn();
+robot.receive = jest.fn();
 robot.on = jest.fn();
 
 robot.brain = jest.fn();

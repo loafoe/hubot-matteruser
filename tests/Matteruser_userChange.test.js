@@ -51,3 +51,10 @@ describe('MatterUser userChenge', () => {
     expect(actual).toBeFalsy();
   });
 });
+
+describe('MatterUser userTyping', () => {
+  test('should see user typing', () => {
+    const actual = tested.userTyping({});
+    expect(actual).toBeTruthy();
+  });
+});
