@@ -1,4 +1,4 @@
-const {USER_WITH_CHANNEL, USER_WITHOUT_CHANNEL} = require("../helpers/samples");
+const {HUBOT_SELF_USER, USER_WITH_CHANNEL, USER_WITHOUT_CHANNEL} = require("../helpers/samples");
 
 const robot = jest.fn();
 robot.send = jest.fn();
@@ -11,6 +11,7 @@ robot.brain.data = {};
 robot.brain.data.users = {
   'okenobi': USER_WITH_CHANNEL,
   'bfett': USER_WITHOUT_CHANNEL,
+  [HUBOT_SELF_USER.id]: HUBOT_SELF_USER,
 };
 robot.brain.userForId = (userId, newUser) => {
   if (newUser !== undefined) {

@@ -22,6 +22,18 @@ beforeEach(() => {
 });
 
 describe('MatterUser message', () => {
+  test('should receive from self user', () => {
+    tested.message({
+      data: {
+        sender_name: 'dsidious',
+        post: JSON.stringify({
+          user_id: HUBOT_SELF_USER.id,
+        }),
+      }
+    });
+    expect(robot.receive).not.toHaveBeenCalled();
+  });
+
   test('should receive from ignored user', () => {
     tested.mmIgnoreUsers = ['dsidious'];
     tested.message({
