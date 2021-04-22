@@ -1,6 +1,6 @@
 {
   "name": "hubot-matteruser",
-  "version": "5.4.3",
+  "version": "5.4.4",
   "author": {
     "name": "Andy Lo-A-Foe",
     "url": "https://github.com/loafoe"
@@ -24,14 +24,14 @@
   },
   "main": "./src/matteruser.js",
   "scripts": {
-    "test": "node_modules/.bin/jest",
+    "test": "jest",
     "lint": "yarn lint:js",
     "lint:fix": "yarn lint:js:fix",
-    "lint:js": "node_modules/.bin/eslint 'src/**/*.js'",
+    "lint:js": "eslint 'src/**/*.js'",
     "lint:js:fix": "yarn lint:js --fix"
   },
   "dependencies": {
-    "mattermost-client": "file:../mattermost-client",
+    "mattermost-client": "^6.4.0",
     "parent-require": "^1.0.0",
     "q": "^1.4.1",
     "ws": "^7.3.1"
@@ -40,6 +40,7 @@
     "hubot": ">=3.0.1"
   },
   "devDependencies": {
+    "yarn": "^1.22.10",
     "eslint": "^7.21.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "hubot": "^3.3.2",

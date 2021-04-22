@@ -3101,8 +3101,10 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-"mattermost-client@file:../mattermost-client":
-  version "6.4.1"
+mattermost-client@^6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/mattermost-client/-/mattermost-client-6.4.0.tgz#3b51b6055d8ed60ac044d0682120e4ebf203b330"
+  integrity sha512-XluDNLxtkCPjAPSQTYB4TmJXKevgcIs+p8C99JwxE60VTnpNKJ6D4giQC2VI9BH7hF6SlfVFHdBEu5ftdjkvlQ==
   dependencies:
     extend "^3.0.2"
     https-proxy-agent "^5.0.0"
@@ -4683,3 +4685,8 @@ yargs@^15.4.1:
     which-module "^2.0.0"
     y18n "^4.0.0"
     yargs-parser "^18.1.2"
+
+yarn@^1.22.10:
+  version "1.22.10"
+  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.22.10.tgz#c99daa06257c80f8fa2c3f1490724e394c26b18c"
+  integrity sha512-IanQGI9RRPAN87VGTF7zs2uxkSyQSrSPsju0COgbsKQOOXr5LtcVPeyXWgwVa0ywG3d8dg6kSYKGBuYK021qeA==
