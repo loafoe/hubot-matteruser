@@ -450,7 +450,7 @@ class Matteruser extends Adapter {
 
   userRemoved(msg) {
     // update channels when this bot is removed from a channel
-    if (msg.broadcast.user_id === this.self.id) {
+    if (msg.data.user_id === this.self.id) {
       this.client.loadChannels();
     }
     try {
