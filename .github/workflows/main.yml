@@ -4,6 +4,33 @@ on: [push, pull_request]
 
 jobs:
 
+  test:
+    name: Test on Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ '12', '10' ]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - name: install dependencies
+        run: npm ci
+      - name: Project Tests
+        run: npm test
+
+  test_latest:
+    name: Test on latest Node
+    runs-on: ubuntu-latest
+    container: node:current
+    steps:
+      - uses: actions/checkout@v1
+      - name: install dependencies
+        run: npm ci
+      - name: Project Tests
+        run: npm test
+
   eslint:
     name: Check ESLint
     runs-on: ubuntu-latest

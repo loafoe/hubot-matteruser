@@ -87,7 +87,9 @@ class Matteruser extends Adapter {
     const mmAccessToken = process.env.MATTERMOST_ACCESS_TOKEN || null;
     const mmHTTPProxy = process.env.http_proxy || null;
     this.mmNoReply = process.env.MATTERMOST_REPLY === 'false';
-    this.mmIgnoreUsers = (process.env.MATTERMOST_IGNORE_USERS != null ? process.env.MATTERMOST_IGNORE_USERS.split(',') : undefined) || [];
+    this.mmIgnoreUsers = (process.env.MATTERMOST_IGNORE_USERS != null
+      ? process.env.MATTERMOST_IGNORE_USERS.split(',')
+      : undefined) || [];
 
     if (mmHost == null) {
       this.robot.logger.emergency("MATTERMOST_HOST is required");
@@ -106,8 +108,19 @@ class Matteruser extends Adapter {
       process.exit(1);
     }
 
-    this.client = new MatterMostClient(mmHost, mmGroup, {wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000, httpProxy: mmHTTPProxy});
+    this.client = new MatterMostClient(mmHost, mmGroup, {
+      wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000, httpProxy: mmHTTPProxy
+    });
 
+    this.declareCallbacks();
+    if (mmAccessToken != null) {
+      return this.client.tokenLogin(mmAccessToken);
+    }
+
+    return this.client.login(mmUser, mmPassword, mmMFAToken);
+  }
+
+  declareCallbacks() {
     this.client.on('open', this.open);
     this.client.on('hello', this.onHello);
     this.client.on('loggedIn', this.loggedIn);
@@ -120,11 +133,6 @@ class Matteruser extends Adapter {
     this.client.on('error', this.error);
 
     this.robot.brain.on('loaded', this.brainLoaded);
-
-    if (mmAccessToken != null) {
-      return this.client.tokenLogin(mmAccessToken);
-    }
-    return this.client.login(mmUser, mmPassword, mmMFAToken);
   }
 
   open() {
@@ -147,6 +155,11 @@ class Matteruser extends Adapter {
     return true;
   }
 
+  /**
+   *
+   * @param {User} user The user to be change
+   * @returns {User} The updated User
+   */
   userChange(user) {
     if (!user || (user.id == null)) {
       return;
@@ -183,12 +196,22 @@ class Matteruser extends Adapter {
     return this.robot.brain.userForId(user.id, newUser);
   }
 
+  /**
+   *
+   * @param {User} user The user to logged in
+   * @returns {boolean} True if the user is now logged in
+   */
   loggedIn(user) {
     this.robot.logger.info(`Logged in as user "${user.username}" but not connected yet.`);
     this.self = user;
     return true;
   }
 
+  /**
+   *
+   * @param {User[]} profiles The users profile loaded
+   * @returns {[]} The changed users
+   */
   profilesLoaded(profiles) {
     return (() => {
       const result = [];
@@ -209,6 +232,12 @@ class Matteruser extends Adapter {
     return true;
   }
 
+  /**
+   *
+   * @param {Envelop} envelope containing the room to send strings
+   * @param {string} strings  The messages to send
+   * @return {undefined}
+   */
   send(envelope, ...strings) {
     // Check if the target room is also a user's username
     let str;
@@ -254,6 +283,12 @@ class Matteruser extends Adapter {
     }
   }
 
+  /**
+   *
+   * @param {Envelop} envelope The Message envelop
+   * @param {string} strings The message lines to reply
+   * @returns {void}
+   */
   cmd(envelope, ...strings) {
     // Check if the target room is also a user's username
     let str;
@@ -299,6 +334,12 @@ class Matteruser extends Adapter {
     }
   }
 
+  /**
+   * Reply to a message
+   * @param {Envelop} envelope The Message envelop
+   * @param {string} strings The message lines to reply
+   * @returns {void}
+   */
   reply(envelope, ...strings) {
     if (this.mmNoReply) {
       return this.send(envelope, ...strings);
@@ -409,7 +450,7 @@ class Matteruser extends Adapter {
 
   userRemoved(msg) {
     // update channels when this bot is removed from a channel
-    if (msg.broadcast.user_id === this.self.id) {
+    if (msg.data.user_id === this.self.id) {
       this.client.loadChannels();
     }
     try {
