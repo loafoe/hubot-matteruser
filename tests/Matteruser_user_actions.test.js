@@ -1,4 +1,5 @@
 const {HUBOT_SELF_USER} = require("./helpers/samples");
+const {LeaveMessage, EnterMessage} = require("hubot/es2015");
 const {use} = require('../src/matteruser.js');
 jest.mock('mattermost-client');
 
@@ -89,5 +90,63 @@ describe('MatterUser userAdded', () => {
         room: 'jedi',
       }
     });
+    expect(spyReceive.mock.calls[0][0]).toBeInstanceOf(EnterMessage)
+  });
+
+  test('should fail to add user', () => {
+    tested.client.getUserByID = jest.fn().mockImplementation(() => new Error());
+    const actual = tested.userAdded({
+      data: {
+        user_id: HUBOT_SELF_USER.id
+      },
+      broadcast: {
+        channel_id: 'jedi'
+      }
+    });
+
+    expect(actual).toBeFalsy();
+  });
+});
+
+describe('MatterUser userRemove', () => {
+  test('should remove user', () => {
+    tested.client.getUserByID = jest.fn().mockReturnValue(HUBOT_SELF_USER);
+    let spyReceive = jest.spyOn(tested, 'receive');
+    const actual = tested.userRemoved({
+      data: {
+        user_id: HUBOT_SELF_USER.id
+      },
+      broadcast: {
+        channel_id: 'jedi'
+      }
+    });
+
+    expect(actual).toBeTruthy();
+    expect(tested.client.loadChannels).toHaveBeenCalled();
+    expect(spyReceive).toHaveBeenCalledWith({
+      room: 'jedi',
+      done: false,
+      user: {
+        id: "matterbot",
+        mm: {dm_channel_id: "66"},
+        username: "Hubot",
+        room: 'jedi',
+      }
+    });
+    expect(spyReceive.mock.calls[0][0]).toBeInstanceOf(LeaveMessage)
+  });
+
+  test('should fail to remove user', () => {
+    tested.client.getUserByID = jest.fn().mockImplementation(() => new Error());
+    const actual = tested.userRemoved({
+      data: {
+        user_id: HUBOT_SELF_USER.id
+      },
+      broadcast: {
+        channel_id: 'jedi'
+      }
+    });
+
+    expect(actual).toBeFalsy();
   });
 });
