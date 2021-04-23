@@ -1,6 +1,8 @@
 const {HUBOT_SELF_USER, USER_WITH_CHANNEL, USER_WITHOUT_CHANNEL} = require("../helpers/samples");
 
-const robot = jest.fn();
+const robot = {
+  name: 'hubot'
+};
 robot.send = jest.fn();
 robot.receive = jest.fn();
 robot.on = jest.fn();
