@@ -69,7 +69,7 @@ describe('MatterUser message', () => {
 
     expect(robot.receive).toHaveBeenCalledWith({
       done: false,
-      text: 'May the force',
+      text: 'hubot May the force',
       user: {
         channel_type: 'D',
         id: 'bfett',
@@ -103,7 +103,7 @@ describe('MatterUser message', () => {
     expect(actual).toBeInstanceOf(TextMessage);
     expect(actual).toEqual({
       done: false,
-      text: 'May the force',
+      text: 'hubot May the force',
       user: {
         channel_type: 'D',
         faction: 'jedi',
@@ -143,7 +143,7 @@ describe('MatterUser message', () => {
     expect(actual).toBeInstanceOf(TextMessage);
     expect(actual).toEqual({
       done: false,
-      origText: 'May the force',
+      origText: 'hubot May the force',
       props: {
         attachments: [
           {
@@ -159,7 +159,7 @@ describe('MatterUser message', () => {
         ]
       },
       text: [
-        'May the force',
+        'hubot May the force',
         '',
         '--',
         '',
