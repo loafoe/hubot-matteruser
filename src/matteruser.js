@@ -140,7 +140,7 @@ class Matteruser extends Adapter {
   }
 
   error(err) {
-    this.robot.logger.info(`Error: ${err}`);
+    this.robot.logger.info('Error: %j', err);
     return true;
   }
 
@@ -151,7 +151,7 @@ class Matteruser extends Adapter {
   }
 
   onHello(event) {
-    this.robot.logger.info(`Mattermost server: ${event.data.server_version}`);
+    this.robot.logger.info('Mattermost server: %s', event.data.server_version);
     return true;
   }
 
@@ -164,7 +164,7 @@ class Matteruser extends Adapter {
     if (!user || (user.id == null)) {
       return;
     }
-    this.robot.logger.debug(`Adding user ${user.id}`);
+    this.robot.logger.debug('Adding user %s', user.id);
     const newUser = {
       name: user.username,
       real_name: `${user.first_name} ${user.last_name}`,
@@ -202,7 +202,7 @@ class Matteruser extends Adapter {
    * @returns {boolean} True if the user is now logged in
    */
   loggedIn(user) {
-    this.robot.logger.info(`Logged in as user "${user.username}" but not connected yet.`);
+    this.robot.logger.info('Logged in as user "%s" but not connected yet.', user.username);
     this.self = user;
     return true;
   }
@@ -387,7 +387,7 @@ class Matteruser extends Adapter {
 
   message(msg) {
     if (this.mmIgnoreUsers.includes(msg.data.sender_name)) {
-      this.robot.logger.info(`User ${msg.data.sender_name} is in MATTERMOST_IGNORE_USERS, ignoring them.`);
+      this.robot.logger.info('User %s is in MATTERMOST_IGNORE_USERS, ignoring them.', msg.data.sender_name);
       return;
     }
 
@@ -396,7 +396,7 @@ class Matteruser extends Adapter {
     if (mmPost.user_id === this.self.id) {
       return;
     } // Ignore our own output
-    this.robot.logger.debug(`From: ${mmPost.user_id}, To: ${this.self.id}`);
+    this.robot.logger.debug('From: %s, To: %s', mmPost.user_id, this.self.id);
 
     const user = this.robot.brain.userForId(mmPost.user_id);
     user.room = mmPost.channel_id;
@@ -415,7 +415,7 @@ class Matteruser extends Adapter {
       }
       user.mm.dm_channel_id = mmPost.channel_id;
     }
-    this.robot.logger.debug(`Text: ${text}`);
+    this.robot.logger.debug('Text: %s', text);
 
     if (mmPost.file_ids) {
       this.receive(new AttachmentMessage(user, text, mmPost.file_ids, mmPost.id));
@@ -430,7 +430,7 @@ class Matteruser extends Adapter {
   }
 
   userTyping(msg) {
-    this.robot.logger.info('Someone is typing...', msg);
+    this.robot.logger.info('Someone is typing -> %j', msg);
     return true;
   }
 
@@ -475,7 +475,7 @@ class Matteruser extends Adapter {
     const channelInfo = this.client.findChannelByName(channel);
 
     if (channelInfo == null) {
-      return this.robot.logger.error("Channel not found");
+      return this.robot.logger.error('Channel not found');
     }
 
     return this.client.setChannelHeader(channelInfo.id, header);
