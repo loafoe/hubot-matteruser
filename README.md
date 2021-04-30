@@ -130,7 +130,7 @@ To upgrade your Hubot for Mattermost 4.4.x, find the `package.json` file in your
   ```json
     ...
     "dependencies": {
-      "hubot-matteruser": "^5.4.4"
+      "hubot-matteruser": "^5.4.5"
     },
     ...
   ```

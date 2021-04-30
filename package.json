@@ -1,6 +1,6 @@
 {
   "name": "hubot-matteruser",
-  "version": "5.4.4",
+  "version": "5.4.5",
   "author": {
     "name": "Andy Lo-A-Foe",
     "url": "https://github.com/loafoe"
@@ -30,19 +30,19 @@
     "prepublishOnly": "npm run build:prod"
   },
   "dependencies": {
-    "mattermost-client": "^6.4.0"
+    "mattermost-client": "^6.4.1"
   },
   "peerDependencies": {
     "hubot": ">=3.0.1"
   },
   "devDependencies": {
-    "yarn": "^1.22.10",
     "eslint": "^7.25.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "hubot": "^3.3.2",
     "jest": "^26.6.3",
     "webpack": "^5.35.1",
-    "webpack-cli": "^4.6.0"
+    "webpack-cli": "^4.6.0",
+    "yarn": "^1.22.10"
   },
   "repository": {
     "type": "git",
