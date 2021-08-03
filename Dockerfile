@@ -1,10 +1,10 @@
-FROM node:14
+FROM node:14-alpine
 
 ARG hubot_owner
 ARG hubot_description
 ARG hubot_name
 
-RUN useradd -m -s /bin/bash hubot-matteruser
+RUN adduser -D -s /bin/bash hubot-matteruser
 
 RUN mkdir -p /usr/src/hubot-matteruser
 RUN chown hubot-matteruser:hubot-matteruser /usr/src/hubot-matteruser
