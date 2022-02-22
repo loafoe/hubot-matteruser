@@ -109,7 +109,8 @@ class Matteruser extends Adapter {
     }
 
     this.client = new MatterMostClient(mmHost, mmGroup, {
-      wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000, httpProxy: mmHTTPProxy
+      wssPort: mmWSSPort, httpPort: mmHTTPPort, pingInterval: 30000, httpProxy: mmHTTPProxy,
+      logger: this.robot.logger
     });
 
     this.declareCallbacks();
