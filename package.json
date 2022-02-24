@@ -1,6 +1,6 @@
 {
   "name": "hubot-matteruser",
-  "version": "5.4.5",
+  "version": "5.4.6",
   "author": {
     "name": "Andy Lo-A-Foe",
     "url": "https://github.com/loafoe"
@@ -30,7 +30,7 @@
     "prepublishOnly": "npm run build:prod"
   },
   "dependencies": {
-    "mattermost-client": "^6.4.1"
+    "mattermost-client": "^6.5.0"
   },
   "peerDependencies": {
     "hubot": ">=3.0.1"
