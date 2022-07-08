@@ -3508,5 +3508,5 @@ yargs@^17.3.1:
     yargs-parser "^21.0.0"
 
 yarn@^1.22.10:
-  version "1.22.18"
-  resolved "https://registry.npmjs.org/yarn/-/yarn-1.22.18.tgz"
+  version "1.22.19"
+  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.22.19.tgz#4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
